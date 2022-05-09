@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 import Layout from "../components/Layout";
-import Gain from "../components/Gain";
 import Menu from "../components/Menu";
+import WorkSpace from "../components/WorkSpace";
+import Bar from "../components/Bar";
 
 const Home: NextPage = () => {
   return (
@@ -9,8 +10,9 @@ const Home: NextPage = () => {
       <h1 className="bg-gray-600 text-3xl">
         Welcome to <a href="https://nextjs.org">Next.js!</a>
       </h1>
-      <Gain />
+      <Bar />
       <Menu />
+      <WorkSpace />
     </Layout>
   );
 };
