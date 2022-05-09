@@ -1,13 +1,24 @@
+import { useStateContext } from "../context/StateContext";
+
 const Menu: React.FC = () => {
+  const { action } = useStateContext();
+  const handleSelectComponent = (e: string) => {
+    action({ type: "SELECT_COMPONENT", component: e });
+  };
   return (
-    <div className="h-full w-1/5 bg-gray-300 flex flex-col items-start">
-      <div>Component 1</div>
-      <div>Component 2</div>
-      <div>Component 3</div>
-      <div>Component 4</div>
-      <div>Component 5</div>
-      <div>Component 6</div>
-      <div>Component 7</div>
+    <div className="fixed right-0 h-full w-1/5 bg-gray-300 flex flex-col items-start z-10">
+      <button name="Gain" onClick={(e) => handleSelectComponent(e.currentTarget.name)}>
+        Gain
+      </button>
+      <button name="Constant" onClick={(e) => handleSelectComponent(e.currentTarget.name)}>
+        Constant
+      </button>
+      <button name="Integrator" onClick={(e) => handleSelectComponent(e.currentTarget.name)}>
+        Integrator
+      </button>
+      <button name="Scope" onClick={(e) => handleSelectComponent(e.currentTarget.name)}>
+        Scope
+      </button>
     </div>
   );
 };
