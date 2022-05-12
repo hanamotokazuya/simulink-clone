@@ -1,16 +1,15 @@
 import _ from "lodash";
 
 export abstract class ComponentBase {
-  static components: ComponentBase[] = [];
+  static components: { [key in number]?: ComponentBase } = {};
   static endTime = 10;
-  static samplingTime = 0.001;
+  static samplingTime = 0.1;
   static time = _.range(0, this.endTime + 0.0001, this.samplingTime);
-  static endPointComponents: ComponentBase[] = [];
-  static results: (number | number[])[][] = [[]];
+  static endPointComponents: { [key in number]?: ComponentBase } = {};
+  static links: { [key in number]?: { from: number; to: number } } = {};
+  static results: (number | number[] | undefined)[][] = [[]];
   id: number;
   name: string;
-  x: number;
-  y: number;
   inputLink: number[];
   outputLink: number[];
   inportNum: number;
@@ -19,10 +18,8 @@ export abstract class ComponentBase {
   oldValue: number | number[];
   steps: number;
   constructor() {
-    this.id = ComponentBase.components.length;
+    this.id = NaN;
     this.name = "";
-    this.x = 0;
-    this.y = 0;
     this.inputLink = [];
     this.outputLink = [];
     this.inportNum = 1;
@@ -31,30 +28,37 @@ export abstract class ComponentBase {
     this.oldValue = 0;
     this.steps = 0;
   }
-  protected addComponent() {
-    ComponentBase.components.push(this);
+  protected addComponent(key: number) {
+    ComponentBase.components[key] = this;
   }
-  protected addEndpointComponent() {
-    ComponentBase.endPointComponents.push(this);
+  protected removeComponent(key: number) {
+    delete ComponentBase.components[key];
   }
-  protected removeEndpointComponent() {
-    ComponentBase.endPointComponents.filter((component) => component !== this);
+  protected addEndpointComponent(key: number) {
+    ComponentBase.endPointComponents[key] = this;
   }
-  connect(component: ComponentBase) {
-    this.inputLink.push(component.id);
+  protected removeEndpointComponent(key: number) {
+    delete ComponentBase.endPointComponents[key];
   }
-  disconnect(component: ComponentBase) {
-    this.inputLink = this.inputLink.filter((v) => v !== component.id);
+  static addLink(key: number, from: number, to: number) {
+    this.links[key] = { from, to };
+    this.components[to]?.inputLink.push(from);
+  }
+  static removeLink(key: number) {
+    const from = this.links[key]?.from;
+    const to = this.links[key]?.to;
+    delete this.links[key];
+    if (to !== undefined) {
+      this.components[to]?.inputLink.filter((v) => v !== from);
+    }
   }
   private static init() {
     this.time = _.range(0, this.endTime + 0.0001, this.samplingTime);
-    this.components.map((component) => {
-      component.init();
-    });
+    Object.values(this.components).forEach((component) => component?.init());
     this.results = [[]];
   }
   private static out(steps: number) {
-    return this.endPointComponents.map((component) => component.out(steps));
+    return Object.values(this.endPointComponents).map((component) => component?.out(steps));
   }
   static run() {
     this.init();
@@ -66,16 +70,13 @@ export abstract class ComponentBase {
 
 export class Gain extends ComponentBase {
   name: string;
-  x: number;
-  y: number;
   property: { gain: number };
-  constructor(x: number, y: number, gain: number) {
+  constructor(id: number, gain: number) {
     super();
-    this.x = x;
-    this.y = y;
+    this.id = id;
     this.name = "Gain";
     this.property = { gain };
-    this.addComponent();
+    this.addComponent(id);
   }
   init() {
     this.steps = 0;
@@ -87,8 +88,8 @@ export class Gain extends ComponentBase {
     }
     if (this.inputLink.length === 1) {
       this.steps++;
-      const calc = ComponentBase.components[this.inputLink[0]].out(steps);
-      if (!Array.isArray(calc)) {
+      const calc = ComponentBase.components[this.inputLink[0]]?.out(steps);
+      if (calc && !Array.isArray(calc)) {
         this.oldValue = calc * this.property.gain;
         return this.oldValue;
       } else {
@@ -100,17 +101,14 @@ export class Gain extends ComponentBase {
 
 export class Constant extends ComponentBase {
   name: string;
-  x: number;
-  y: number;
   property: { constant: number };
-  constructor(x: number, y: number, constant: number) {
+  constructor(id: number, constant: number) {
     super();
-    this.x = x;
-    this.y = y;
+    this.id = id;
     this.name = "Constant";
     this.property = { constant };
     this.inportNum = 0;
-    this.addComponent();
+    this.addComponent(id);
     this.oldValue = this.property.constant;
   }
   init() {
@@ -124,18 +122,15 @@ export class Constant extends ComponentBase {
 }
 export class Integrator extends ComponentBase {
   name: string;
-  x: number;
-  y: number;
   property: { initVal: number };
-  constructor(x: number, y: number, initVal: number) {
+  constructor(id: number, initVal: number) {
     super();
-    this.x = x;
-    this.y = y;
+    this.id = id;
     this.name = "Integrator";
     this.property = { initVal };
     this.inportNum = 1;
     this.oldValue = initVal;
-    this.addComponent();
+    this.addComponent(id);
   }
   init() {
     this.steps = 0;
@@ -149,8 +144,8 @@ export class Integrator extends ComponentBase {
     if (this.steps === 1) {
       return this.oldValue;
     }
-    const calc = ComponentBase.components[this.inputLink[0]].out(steps);
-    if (!Array.isArray(calc) && !Array.isArray(this.oldValue)) {
+    const calc = ComponentBase.components[this.inputLink[0]]?.out(steps);
+    if (calc && !Array.isArray(calc) && !Array.isArray(this.oldValue)) {
       // 要検討
       this.oldValue += calc * ComponentBase.samplingTime;
     } else {
@@ -162,18 +157,15 @@ export class Integrator extends ComponentBase {
 
 export class Scope extends ComponentBase {
   name: string;
-  x: number;
-  y: number;
   property: {};
-  constructor(x: number, y: number) {
+  constructor(id: number) {
     super();
-    this.x = x;
-    this.y = y;
+    this.id = id;
     this.name = "Scope" + String(this.id);
     this.property = {};
     this.inportNum = 1;
-    this.addComponent();
-    this.addEndpointComponent();
+    this.addComponent(id);
+    this.addEndpointComponent(id);
   }
   init() {
     this.steps = 0;
@@ -184,26 +176,26 @@ export class Scope extends ComponentBase {
       return this.oldValue;
     }
     this.steps++;
-    this.oldValue = ComponentBase.components[this.inputLink[0]].out(steps);
+    const calc = ComponentBase.components[this.inputLink[0]]?.out(steps);
+    if (calc) {
+      this.oldValue = calc;
+    }
     return this.oldValue;
   }
 }
 
-export const setComponent = (name: string, x: number, y: number) => {
+export const setComponent = (id: number, name: string): ComponentBase => {
+  console.log(`id: ${id}, name: ${name}`);
   switch (name) {
     case "Gain":
-      new Gain(x, y, 1);
-      break;
+      return new Gain(id, 1);
     case "Constant":
-      new Constant(x, y, 1);
-      break;
+      return new Constant(id, 1);
     case "Integrator":
-      new Integrator(x, y, 0);
-      break;
+      return new Integrator(id, 0);
     case "Scope":
-      new Scope(x, y);
-      break;
+      return new Scope(id);
     default:
-      return;
+      throw new Error("Error!");
   }
 };

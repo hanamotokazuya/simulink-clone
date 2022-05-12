@@ -1,4 +1,4 @@
-import { ComponentBase } from "../lib/component";
+import { ComponentBase } from "../lib/diagrams/src/behavior";
 
 const Bar: React.FC = () => {
   const handleExec = () => {
