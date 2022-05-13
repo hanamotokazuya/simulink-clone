@@ -1,0 +1,1 @@
+export { initDiagram } from "./initDiagram";

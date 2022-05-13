@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
-import { ComponentBase } from "./behavior";
-import { Block, Inport, Outport, Link, PaletteBlock } from "./block";
+import { Node, Inport, Outport, PaletteNode, makeLink } from "../block";
+import { Action } from "../types/context";
 
 // canvas上のrotate制御を無効にし，rotatePointをhiddenにする処理
 const controls = fabric.Object.prototype.controls;
@@ -13,7 +13,11 @@ rotateControls.visible = false;
  * @param paletteId palette用canvasのid
  * @returns [diagram, palette]
  */
-export const initDiagram = (diagramId: string, paletteId: string) => {
+export const initDiagram = (
+  diagramId: string,
+  paletteId: string,
+  action: React.Dispatch<Action>
+) => {
   const shadow = new fabric.Shadow({ color: "blue", blur: 15 });
 
   // ***************************************************************************
@@ -26,7 +30,7 @@ export const initDiagram = (diagramId: string, paletteId: string) => {
   const elements = paletteElementName.map((name, i) => {
     let posX = 50;
     let posY = 20 + i * 70;
-    return new PaletteBlock(name, posX, posY);
+    return new PaletteNode(name, posX, posY);
   });
   palette.add(...elements);
 
@@ -49,18 +53,21 @@ export const initDiagram = (diagramId: string, paletteId: string) => {
   // Diagram -------------------------------------------------------------------
   // ***************************************************************************
   const diagram = new fabric.Canvas(diagramId, { width: 500, height: 500 });
+  // Block群とdiagramを紐づけるための初期化処理
+  Node.init(diagram);
   let activePort: Inport | Outport | undefined = undefined;
-  // Palette behavior ----------------------------------------------------------
+  // diagram behavior ----------------------------------------------------------
 
   // MOUSE:DOWN
   diagram.on("mouse:down", (e) => {
     // パレットの要素が選択されているとき，
     // 押下した場所に選択されている要素に該当するブロックを生成する．
     // 処理完了後，パレットの選択を解除する．
+    console.log(e.target);
     if (selectedPaletteElement) {
       if (e.pointer && selectedPaletteElement.name) {
-        const block = new Block(selectedPaletteElement.name, e.pointer.x, e.pointer.y);
-        diagram.add(...block.out());
+        const node = new Node(selectedPaletteElement.name, e.pointer.x, e.pointer.y);
+        diagram.add(...node.out());
         selectedPaletteElement.set({ shadow: undefined });
         palette.renderAll();
         selectedPaletteElement = undefined;
@@ -113,43 +120,14 @@ export const initDiagram = (diagramId: string, paletteId: string) => {
 
   // OBJECT:SCALING
   diagram.on("object:scaling", (e) => {
-    // ブロックとポートの位置を連動させる処理
-    if (e.target instanceof Block) {
-      [e.target.inport.left, e.target.inport.top] = e.target.calcInportPos();
-      [e.target.outport.left, e.target.outport.top] = e.target.calcOutportPos();
-      e.target.inport.setCoords();
-      e.target.outport.setCoords();
-    }
+    // ブロックとポート・リンクの位置を連動させる処理
+    if (e.target instanceof Node) e.target.calcSurrroundingPos();
   });
 
   // OBJECT:MOVING
   diagram.on("object:moving", (e) => {
-    // ブロックとポートの位置を連動させる処理
-    if (e.target instanceof Block) {
-      [e.target.inport.left, e.target.inport.top] = e.target.calcInportPos();
-      [e.target.outport.left, e.target.outport.top] = e.target.calcOutportPos();
-      // ポートとリンクの位置を連動させる処理
-      if (
-        e.target.outport.link &&
-        e.target.outport.link.path &&
-        Array.isArray(e.target.outport.link.path[0])
-      ) {
-        e.target.outport.link.dirty = true;
-        e.target.outport.link.path[0][1] = e.target.outport.left - e.target.outport.height;
-        e.target.outport.link.path[0][2] = e.target.outport.top + e.target.outport.width / 2;
-      }
-      if (
-        e.target.inport.link &&
-        e.target.inport.link.path &&
-        Array.isArray(e.target.inport.link.path[1])
-      ) {
-        e.target.inport.link.dirty = true;
-        e.target.inport.link.path[1][1] = e.target.inport.left;
-        e.target.inport.link.path[1][2] = e.target.inport.top + e.target.inport.width / 2;
-      }
-      e.target.inport.setCoords();
-      e.target.outport.setCoords();
-    }
+    // ブロックとポート・リンクの位置を連動させる処理
+    if (e.target instanceof Node) e.target.calcSurrroundingPos();
   });
 
   // MOUSE:OVER
@@ -170,17 +148,13 @@ export const initDiagram = (diagramId: string, paletteId: string) => {
     }
   });
 
-  return [diagram, palette];
-};
+  // MOUSE:DOUBLECLICK
+  diagram.on("mouse:dblclick", (e) => {
+    console.log("DBLCLICK");
+    if (e.target instanceof Node) {
+      action({ type: "OPEN_DIALOG", behavior: e.target.behavior });
+    }
+  });
 
-/**
- * ポート間のリンクを生成する．
- */
-const makeLink = (from: Outport, to: Inport) => {
-  const svg = `M ${from.left - from.height} ${from.top + from.width / 2} L ${to.left} ${
-    to.top + to.width / 2
-  }`;
-  const link = new Link(svg, { fill: "", stroke: "black", selectable: false });
-  ComponentBase.addLink(link.id, from.parentId, to.parentId);
-  return link;
+  return [diagram, palette];
 };
