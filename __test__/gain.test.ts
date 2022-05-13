@@ -3,6 +3,9 @@ import { Gain, Behavior, Constant } from "../src/behavior";
 describe("Gain behavior test", () => {
   let gain: Gain;
   beforeEach(() => {
+    Behavior.behaviors = {};
+    Behavior.endPointBehaviors = {};
+    Behavior.links = {};
     gain = new Gain(0, 1);
   });
   // Property Test -------------------------------------------------------------

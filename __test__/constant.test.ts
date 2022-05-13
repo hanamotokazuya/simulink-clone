@@ -3,6 +3,9 @@ import { Constant, Behavior } from "../src/behavior";
 describe("Constant behavior test", () => {
   let constant: Constant;
   beforeEach(() => {
+    Behavior.behaviors = {};
+    Behavior.endPointBehaviors = {};
+    Behavior.links = {};
     constant = new Constant(0, 1) as Constant;
   });
   // Property Test -------------------------------------------------------------
