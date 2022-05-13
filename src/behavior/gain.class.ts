@@ -21,7 +21,7 @@ export class Gain extends Behavior {
     if (this.inputLink.length === 1) {
       this.steps++;
       const calc = Behavior.behaviors[this.inputLink[0]]?.out(steps);
-      if (calc && !Array.isArray(calc)) {
+      if (typeof calc !== "undefined" && !Array.isArray(calc)) {
         this.oldValue = calc * this.property.gain;
         return this.oldValue;
       } else {

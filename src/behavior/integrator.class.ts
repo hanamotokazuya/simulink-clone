@@ -25,7 +25,7 @@ export class Integrator extends Behavior {
       return this.oldValue;
     }
     const calc = Behavior.behaviors[this.inputLink[0]]?.out(steps);
-    if (calc && !Array.isArray(calc) && !Array.isArray(this.oldValue)) {
+    if (typeof calc !== "undefined" && !Array.isArray(calc) && !Array.isArray(this.oldValue)) {
       // 要検討
       this.oldValue += calc * Behavior.samplingTime;
     } else {
@@ -34,7 +34,14 @@ export class Integrator extends Behavior {
     return this.oldValue;
   }
   check() {
-    return true;
+    if (
+      !isNaN(this.property.initVal) && // gainは数値であるか
+      Behavior.behaviors[this.inputLink[0]] instanceof Behavior // 入力ポートは接続されているか
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
   toString() {
     return "Integrator";
