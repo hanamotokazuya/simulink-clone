@@ -1,7 +1,30 @@
-import { Constant } from "../src/behavior";
+import { Constant, setBehavior } from "../src/behavior";
 
-describe("TEST", () => {
-  it("TEST", () => {
-    expect(1).toBe(1);
+describe("Test Constant behavior", () => {
+  let constant: Constant;
+  beforeEach(() => {
+    constant = setBehavior(0, "Constant") as Constant;
+  });
+  it("Should has no inport", () => {
+    expect(constant.inportNum).toBe(0);
+  });
+  it("Output of initial value should be 1", () => {
+    expect(constant.out(1)).toBe(1);
+  });
+  it("The step state after output should be incremented", () => {
+    constant.out(1);
+    expect(constant.steps).toBe(1);
+  });
+  it("The step state after 10 times output should be 10", () => {
+    Array(10)
+      .fill(null)
+      .forEach((_, i) => constant.out(i + 1));
+    expect(constant.steps).toBe(10);
+  });
+  it("The step state should not change if the same steps are entered", () => {
+    constant.out(1);
+    expect(constant.steps).toBe(1);
+    constant.out(1);
+    expect(constant.steps).toBe(1);
   });
 });

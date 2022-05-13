@@ -17,6 +17,9 @@ export class Constant extends Behavior {
     this.oldValue = this.property.constant;
   }
   out(steps: number) {
+    if (this.steps === steps) {
+      return this.oldValue;
+    }
     this.steps++;
     return this.oldValue;
   }
