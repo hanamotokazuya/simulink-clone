@@ -75,6 +75,8 @@ export abstract class Behavior {
     console.log(this.behaviors);
   }
   abstract init(): void;
+  abstract check(): boolean;
   abstract out(steps: number): number | number[];
+  abstract toString(): string;
   abstract toString(): string;
 }

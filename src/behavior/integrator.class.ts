@@ -33,6 +33,9 @@ export class Integrator extends Behavior {
     }
     return this.oldValue;
   }
+  check() {
+    return true;
+  }
   toString() {
     return "Integrator";
   }

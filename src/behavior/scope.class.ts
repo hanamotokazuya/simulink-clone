@@ -27,6 +27,9 @@ export class Scope extends Behavior {
     }
     return this.oldValue;
   }
+  check() {
+    return true;
+  }
   toString() {
     return "Scope";
   }

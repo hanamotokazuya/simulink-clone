@@ -29,6 +29,9 @@ export class Gain extends Behavior {
       }
     } else throw new Error("Error!");
   }
+  check() {
+    return true;
+  }
   toString() {
     return String(this.property.gain);
   }

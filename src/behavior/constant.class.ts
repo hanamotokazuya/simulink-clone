@@ -1,5 +1,8 @@
 import { Behavior } from "./behavior.class";
 
+/**
+ * ブロックに定数のふるまいを与える．
+ */
 export class Constant extends Behavior {
   name: string;
   property: { constant: number };
@@ -22,6 +25,11 @@ export class Constant extends Behavior {
     }
     this.steps++;
     return this.oldValue;
+  }
+  check() {
+    let check = true;
+    check = !isNaN(this.property.constant);
+    return check;
   }
   toString() {
     return String(this.property.constant);
