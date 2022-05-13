@@ -30,7 +30,14 @@ export class Gain extends Behavior {
     } else throw new Error("Error!");
   }
   check() {
-    return true;
+    if (
+      !isNaN(this.property.gain) && // gainは数値であるか
+      Behavior.behaviors[this.inputLink[0]] instanceof Behavior // 入力ポートは接続されているか
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
   toString() {
     return String(this.property.gain);
