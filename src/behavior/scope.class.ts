@@ -6,9 +6,10 @@ export class Scope extends Behavior {
   constructor(id: number) {
     super();
     this.id = id;
-    this.name = "Scope" + String(this.id);
+    this.name = "Scope";
     this.property = {};
     this.inportNum = 1;
+    this.outportNum = 0;
     this.addBehavior(String(id));
     this.addEndpointBehavior(String(id));
   }
@@ -28,7 +29,13 @@ export class Scope extends Behavior {
     return this.oldValue;
   }
   check() {
-    return true;
+    if (
+      Behavior.behaviors[this.inputLink[0]] instanceof Behavior // 入力ポートは接続されているか
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
   toString() {
     return "Scope";

@@ -48,8 +48,13 @@ describe("Gain behavior test", () => {
       gain.property.gain = NaN;
       expect(gain.check()).toBe(false);
     });
-    it("If the outport is no connected, check() should return false", () => {
+    it("If the inport is no connected, check() should return false", () => {
       expect(gain.check()).toBe(false);
+      const constant = new Constant(1, 1);
+      const from = { [String(constant.id)]: 0 };
+      const to = { [String(gain.id)]: 0 };
+      Behavior.addLink("0", from, to);
+      expect(gain.check()).toBe(true);
     });
   });
 
