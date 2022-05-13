@@ -27,9 +27,13 @@ export class Constant extends Behavior {
     return this.oldValue;
   }
   check() {
-    let check = true;
-    check = !isNaN(this.property.constant);
-    return check;
+    if (
+      !isNaN(this.property.constant) // constant は数値であるか
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
   toString() {
     return String(this.property.constant);
