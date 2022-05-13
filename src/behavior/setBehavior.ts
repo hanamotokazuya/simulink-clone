@@ -1,7 +1,6 @@
 import * as bv from "./index";
 
 export const setBehavior = (id: number, name: string): bv.Behavior => {
-  console.log(`id: ${id}, name: ${name}`);
   switch (name) {
     case "Gain":
       return new bv.Gain(id, 1);
