@@ -27,4 +27,13 @@ describe("Test Constant behavior", () => {
     constant.out(1);
     expect(constant.steps).toBe(1);
   });
+  it("toString() should output constant value", () => {
+    expect(constant.toString()).toBe("1");
+    constant.property.constant = 1000;
+    expect(constant.toString()).toBe("1000");
+  });
+  it("If the constant value is not numerical value, check() should return false", () => {
+    constant.property.constant = NaN;
+    expect(constant.check()).toBe(false);
+  });
 });
