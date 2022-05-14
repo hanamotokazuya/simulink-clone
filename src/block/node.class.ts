@@ -30,9 +30,12 @@ export class Node extends Block {
     this.addBlock(this.id);
   }
   calcSurrroundingPos() {
-    for (let inport of this.inport) {
+    this.inport.forEach((inport, i) => {
       inport.left = this.left;
-      inport.top = this.top + (this.height * this.scaleY) / 2 - inport.height / 2;
+      inport.top =
+        this.top +
+        ((1 + i) * (this.height * this.scaleY)) / (this.inportNum + 1) -
+        inport.height / 2;
       if (inport.link && inport.link.path && Array.isArray(inport.link.path[1])) {
         inport.link.dirty = true;
         inport.link.path[1][1] = inport.left;
@@ -40,10 +43,13 @@ export class Node extends Block {
         inport.link.setCoords();
       }
       inport.setCoords();
-    }
-    for (let outport of this.outport) {
+    });
+    this.outport.forEach((outport, i) => {
       outport.left = this.left + this.width * this.scaleX + outport.height;
-      outport.top = this.top + (this.height * this.scaleY) / 2 - outport.height / 2;
+      outport.top =
+        this.top +
+        ((1 + i) * (this.height * this.scaleY)) / (this.outportNum + 1) -
+        outport.height / 2;
       if (outport.link && outport.link.path && Array.isArray(outport.link.path[0])) {
         outport.link.dirty = true;
         outport.link.path[0][1] = outport.left - outport.height;
@@ -51,7 +57,7 @@ export class Node extends Block {
         outport.link.setCoords();
       }
       outport.setCoords();
-    }
+    });
   }
   out(): fabric.Object[] {
     return [this, ...this.inport, ...this.outport];
