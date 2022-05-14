@@ -9,12 +9,12 @@ export class Integrator extends Behavior {
     this.name = "Integrator";
     this.property = { initVal };
     this.inportNum = 1;
-    this.oldValue = initVal;
+    this.oldValue = [initVal];
     this.addBehavior(String(id));
   }
   init() {
     this.steps = 0;
-    this.oldValue = this.property.initVal;
+    this.oldValue = [this.property.initVal];
   }
   out(steps: number) {
     if (steps === this.steps) {
@@ -25,9 +25,8 @@ export class Integrator extends Behavior {
       return this.oldValue;
     }
     const calc = Behavior.behaviors[this.inputLink[0]]?.out(steps);
-    if (typeof calc !== "undefined" && !Array.isArray(calc) && !Array.isArray(this.oldValue)) {
-      // 要検討
-      this.oldValue += calc * Behavior.samplingTime;
+    if (typeof calc !== "undefined") {
+      this.oldValue = calc.map((v, i) => this.oldValue[i] + v * Behavior.samplingTime);
     } else {
       throw new Error("Error!");
     }

@@ -34,7 +34,7 @@ describe("Gain behavior test", () => {
       expect(Behavior.behaviors[String(gain.id)] === gain).toBe(true);
     });
     it("initial old value should be 0", () => {
-      expect(gain.oldValue).toBe(0);
+      expect(gain.oldValue[0]).toBe(0);
     });
   });
 
@@ -68,13 +68,13 @@ describe("Gain behavior test", () => {
     });
     it("steps should be 0 and old value should be 0", () => {
       expect(gain.steps).toBe(0);
-      expect(gain.oldValue).toBe(0);
+      expect(gain.oldValue[0]).toBe(0);
       gain.out(1);
       expect(gain.steps).toBe(1);
-      expect(gain.oldValue).toBe(1);
+      expect(gain.oldValue[0]).toBe(1);
       gain.init();
       expect(gain.steps).toBe(0);
-      expect(gain.oldValue).toBe(0);
+      expect(gain.oldValue[0]).toBe(0);
     });
   });
 
@@ -109,19 +109,19 @@ describe("Gain behavior test", () => {
       gain.property.gain = 5;
       gain.init();
       gain.out(1);
-      expect(gain.out(1)).toBe(50);
+      expect(gain.out(1)[0]).toBe(50);
     });
     it("1 * 0 = 0", () => {
       gain.property.gain = 0;
       gain.init();
       gain.out(1);
-      expect(gain.out(1)).toBe(0);
+      expect(gain.out(1)[0]).toBe(0);
     });
     it("1 * (-1) = -1", () => {
       gain.property.gain = -1;
       gain.init();
       gain.out(1);
-      expect(gain.out(1)).toBe(-1);
+      expect(gain.out(1)[0]).toBe(-1);
     });
   });
 

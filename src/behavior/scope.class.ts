@@ -15,7 +15,7 @@ export class Scope extends Behavior {
   }
   init() {
     this.steps = 0;
-    this.oldValue = 0;
+    this.oldValue = [0];
   }
   out(steps: number) {
     if (steps === this.steps) {
@@ -23,7 +23,7 @@ export class Scope extends Behavior {
     }
     this.steps++;
     const calc = Behavior.behaviors[this.inputLink[0]]?.out(steps);
-    if (calc) {
+    if (typeof calc !== "undefined") {
       this.oldValue = calc;
     }
     return this.oldValue;

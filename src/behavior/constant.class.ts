@@ -13,11 +13,11 @@ export class Constant extends Behavior {
     this.property = { constant };
     this.inportNum = 0;
     this.addBehavior(String(id));
-    this.oldValue = this.property.constant;
+    this.oldValue = [this.property.constant];
   }
   init() {
     this.steps = 0;
-    this.oldValue = this.property.constant;
+    this.oldValue = [this.property.constant];
   }
   out(steps: number) {
     if (this.steps === steps) {

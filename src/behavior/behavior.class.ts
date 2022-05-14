@@ -8,7 +8,7 @@ export abstract class Behavior {
   static time = _.range(0, this.endTime + 0.0001, this.samplingTime);
   static endPointBehaviors: { [key in string]?: Behavior } = {};
   static links: Links = {};
-  static results: (number | number[] | undefined)[][] = [[]];
+  static results: (number[] | undefined)[][] = [[]];
   id: number;
   name: string;
   inputLink: string[];
@@ -16,7 +16,7 @@ export abstract class Behavior {
   inportNum: number;
   outportNum: number;
   property: { [key in string]: number };
-  oldValue: number | number[];
+  oldValue: number[];
   steps: number;
   constructor() {
     this.id = NaN;
@@ -26,7 +26,7 @@ export abstract class Behavior {
     this.inportNum = 1;
     this.outportNum = 1;
     this.property = {};
-    this.oldValue = 0;
+    this.oldValue = [0];
     this.steps = 0;
   }
   protected addBehavior(key: string) {
@@ -76,7 +76,7 @@ export abstract class Behavior {
   }
   abstract init(): void;
   abstract check(): boolean;
-  abstract out(steps: number): number | number[];
+  abstract out(steps: number): number[];
   abstract toString(): string;
   abstract toString(): string;
 }

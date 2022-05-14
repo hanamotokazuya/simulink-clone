@@ -12,7 +12,7 @@ export class Gain extends Behavior {
   }
   init() {
     this.steps = 0;
-    this.oldValue = 0;
+    this.oldValue = [0];
   }
   out(steps: number) {
     if (steps === this.steps) {
@@ -21,8 +21,8 @@ export class Gain extends Behavior {
     if (this.inputLink.length === 1) {
       this.steps++;
       const calc = Behavior.behaviors[this.inputLink[0]]?.out(steps);
-      if (typeof calc !== "undefined" && !Array.isArray(calc)) {
-        this.oldValue = calc * this.property.gain;
+      if (typeof calc !== "undefined") {
+        this.oldValue = calc.map((v) => v * this.property.gain);
         return this.oldValue;
       } else {
         throw new Error("Error!");

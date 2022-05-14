@@ -35,7 +35,7 @@ describe("Integrator behavior test", () => {
       expect(Behavior.behaviors[String(integrator.id)] === integrator).toBe(true);
     });
     it("initial old value should be 0", () => {
-      expect(integrator.oldValue).toBe(0);
+      expect(integrator.oldValue[0]).toBe(0);
     });
   });
 
@@ -69,16 +69,16 @@ describe("Integrator behavior test", () => {
     });
     it("steps should be 0 and old value should be 0", () => {
       expect(integrator.steps).toBe(0);
-      expect(integrator.oldValue).toBe(0);
+      expect(integrator.oldValue[0]).toBe(0);
       integrator.out(1);
       expect(integrator.steps).toBe(1);
-      expect(integrator.oldValue).toBe(0);
+      expect(integrator.oldValue[0]).toBe(0);
       integrator.out(2);
       expect(integrator.steps).toBe(2);
-      expect(integrator.oldValue).toBe(0.1);
+      expect(integrator.oldValue[0]).toBe(0.1);
       integrator.init();
       expect(integrator.steps).toBe(0);
-      expect(integrator.oldValue).toBe(0);
+      expect(integrator.oldValue[0]).toBe(0);
     });
   });
 
@@ -116,9 +116,7 @@ describe("Integrator behavior test", () => {
       Behavior.addLink("1", from, to);
       Behavior.run();
       let result;
-      if (!Array.isArray(scope.oldValue)) {
-        result = Math.round(scope.oldValue * 10 ** 10) / 10 ** 10;
-      }
+      result = Math.round(scope.oldValue[0] * 10 ** 10) / 10 ** 10;
       expect(result).toBe(10);
     });
     it("When endTime=10, samplingTime=0.1 and input=1, double integrated result should be 50", () => {
@@ -132,9 +130,7 @@ describe("Integrator behavior test", () => {
       Behavior.addLink("2", from, to);
       Behavior.run();
       let result;
-      if (!Array.isArray(scope.oldValue)) {
-        result = Math.round(scope.oldValue * 10 ** 10) / 10 ** 10;
-      }
+      result = Math.round(scope.oldValue[0] * 10 ** 10) / 10 ** 10;
       expect(result).toBe(49.5);
     });
   });

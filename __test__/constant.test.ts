@@ -34,7 +34,7 @@ describe("Constant behavior test", () => {
       expect(Behavior.behaviors[String(constant.id)] === constant).toBe(true);
     });
     it("initial old value should be 1", () => {
-      expect(constant.oldValue).toBe(1);
+      expect(constant.oldValue[0]).toBe(1);
     });
   });
 
@@ -50,16 +50,16 @@ describe("Constant behavior test", () => {
   describe("init() test", () => {
     it("steps should be 0 and old value should be property.constant", () => {
       expect(constant.steps).toBe(0);
-      expect(constant.oldValue).toBe(1);
+      expect(constant.oldValue[0]).toBe(1);
       constant.out(1);
       expect(constant.steps).toBe(1);
-      expect(constant.oldValue).toBe(1);
+      expect(constant.oldValue[0]).toBe(1);
       constant.init();
       expect(constant.steps).toBe(0);
-      expect(constant.oldValue).toBe(1);
+      expect(constant.oldValue[0]).toBe(1);
       constant.property.constant = 1000;
       constant.init();
-      expect(constant.oldValue).toBe(1000);
+      expect(constant.oldValue[0]).toBe(1000);
     });
   });
 

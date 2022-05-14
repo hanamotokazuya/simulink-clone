@@ -34,7 +34,7 @@ describe("Gain behavior test", () => {
       expect(Behavior.behaviors[String(scope.id)] === scope).toBe(true);
     });
     it("initial old value should be 0", () => {
-      expect(scope.oldValue).toBe(0);
+      expect(scope.oldValue[0]).toBe(0);
     });
   });
 
@@ -60,13 +60,13 @@ describe("Gain behavior test", () => {
     });
     it("steps should be 0 and old value should be 0", () => {
       expect(scope.steps).toBe(0);
-      expect(scope.oldValue).toBe(0);
+      expect(scope.oldValue[0]).toBe(0);
       scope.out(1);
       expect(scope.steps).toBe(1);
-      expect(scope.oldValue).toBe(1);
+      expect(scope.oldValue[0]).toBe(1);
       scope.init();
       expect(scope.steps).toBe(0);
-      expect(scope.oldValue).toBe(0);
+      expect(scope.oldValue[0]).toBe(0);
     });
   });
 
