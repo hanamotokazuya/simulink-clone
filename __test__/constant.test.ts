@@ -28,7 +28,7 @@ describe("Constant behavior test", () => {
       expect(constant.outportNum).toBe(1);
     });
     it("initial value  of constant should be 1", () => {
-      expect(constant.property.constant).toBe(1);
+      expect(constant.property.constant).toBe("1");
     });
     it("When a instance is generated, the instance added Behavior lists", () => {
       expect(Behavior.behaviors[String(constant.id)] === constant).toBe(true);
@@ -41,7 +41,7 @@ describe("Constant behavior test", () => {
   // check Test ----------------------------------------------------------------
   describe("check() test", () => {
     it("If the constant value is not numerical value, check() should return false", () => {
-      constant.property.constant = NaN;
+      constant.property.constant = "NaN";
       expect(constant.check()).toBe(false);
     });
   });
@@ -57,7 +57,7 @@ describe("Constant behavior test", () => {
       constant.init();
       expect(constant.steps).toBe(0);
       expect(constant.oldValue[0]).toBe(1);
-      constant.property.constant = 1000;
+      constant.property.constant = "1000";
       constant.init();
       expect(constant.oldValue[0]).toBe(1000);
     });
@@ -87,7 +87,7 @@ describe("Constant behavior test", () => {
   describe("toString() test", () => {
     it("toString() should output constant value", () => {
       expect(constant.toString()).toBe("1");
-      constant.property.constant = 1000;
+      constant.property.constant = "1000";
       expect(constant.toString()).toBe("1000");
     });
   });

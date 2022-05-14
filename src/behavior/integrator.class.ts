@@ -2,19 +2,19 @@ import { Behavior } from "./behavior.class";
 
 export class Integrator extends Behavior {
   name: string;
-  property: { initVal: number };
+  property: { initVal: string };
   constructor(id: number, initVal: number) {
     super();
     this.id = id;
     this.name = "Integrator";
-    this.property = { initVal };
+    this.property = { initVal: String(initVal) };
     this.inportNum = 1;
     this.oldValue = [initVal];
     this.addBehavior(String(id));
   }
   init() {
     this.steps = 0;
-    this.oldValue = [this.property.initVal];
+    this.oldValue = [Number(this.property.initVal)];
   }
   out(steps: number) {
     if (steps === this.steps) {
@@ -34,7 +34,7 @@ export class Integrator extends Behavior {
   }
   check() {
     if (
-      !isNaN(this.property.initVal) && // gainは数値であるか
+      !isNaN(Number(this.property.initVal)) && // gainは数値であるか
       Behavior.behaviors[this.inputLink[0]] instanceof Behavior // 入力ポートは接続されているか
     ) {
       return true;

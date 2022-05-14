@@ -2,20 +2,21 @@ import _ from "lodash";
 import { Links, PortOfBlock } from "../types/behavior";
 
 export abstract class Behavior {
-  static behaviors: { [key in string]?: Behavior } = {};
+  static behaviors: { [key in string]: Behavior } = {};
   static endTime = 10;
   static samplingTime = 0.1;
   static time = _.range(0, this.endTime + 0.0001, this.samplingTime);
-  static endPointBehaviors: { [key in string]?: Behavior } = {};
+  static endPointBehaviors: { [key in string]: Behavior } = {};
   static links: Links = {};
-  static results: (number[] | undefined)[][] = [[]];
+  // static results: (number[] | undefined)[][] = [[]];
+  static results: { [key in string]: number[][] } = {};
   id: number;
   name: string;
   inputLink: string[];
   outputLink: string[];
   inportNum: number;
   outportNum: number;
-  property: { [key in string]: number };
+  property: { [key in string]: string };
   oldValue: number[];
   steps: number;
   constructor() {
@@ -63,20 +64,33 @@ export abstract class Behavior {
   }
   private static init() {
     this.time = _.range(0, this.endTime + 0.0001, this.samplingTime);
-    Object.values(this.behaviors).forEach((behavior) => behavior?.init());
-    this.results = [[]];
+    Object.values(this.behaviors).forEach((behavior) => behavior.init());
+    // this.results = [[]];
+    this.results = {};
   }
-  private static out(steps: number) {
-    return Object.values(this.endPointBehaviors).map((behavior) => behavior?.out(steps));
+  private static check() {
+    return !Object.values(this.behaviors)
+      .map((behavior) => behavior?.check())
+      .includes(false);
+  }
+  private static out(steps: number): number[][] {
+    return Object.values(this.endPointBehaviors).map((behavior) => behavior.out(steps));
   }
   static run() {
     this.init();
-    this.results = this.time.map((_, i) => this.out(i + 1));
+    if (this.check()) {
+      const keys = Object.keys(this.endPointBehaviors); // 要検討 順序が保証されない可能性がある
+      const results = this.time.map((_, i) => this.out(i + 1));
+      keys.forEach((key, i) => {
+        this.results[key] = results.map((result) => result[i]);
+      });
+    } else {
+      throw new Error("Error!");
+    }
     console.log(this.behaviors);
   }
   abstract init(): void;
   abstract check(): boolean;
   abstract out(steps: number): number[];
-  abstract toString(): string;
   abstract toString(): string;
 }

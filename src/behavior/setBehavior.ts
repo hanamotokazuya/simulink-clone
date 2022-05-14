@@ -10,6 +10,8 @@ export const setBehavior = (id: number, name: string): bv.Behavior => {
       return new bv.Integrator(id, 0);
     case "Scope":
       return new bv.Scope(id);
+    case "Arithmetic":
+      return new bv.Arithmetic(id);
     default:
       throw new Error("Error!");
   }

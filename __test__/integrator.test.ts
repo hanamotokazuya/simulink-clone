@@ -29,7 +29,7 @@ describe("Integrator behavior test", () => {
       expect(integrator.outportNum).toBe(1);
     });
     it("initial value  of initVal should be 0", () => {
-      expect(integrator.property.initVal).toBe(0);
+      expect(integrator.property.initVal).toBe("0");
     });
     it("When a instance is generated, the instance added Behavior lists", () => {
       expect(Behavior.behaviors[String(integrator.id)] === integrator).toBe(true);
@@ -46,7 +46,7 @@ describe("Integrator behavior test", () => {
       const from = { [String(constant.id)]: 0 };
       const to = { [String(integrator.id)]: 0 };
       Behavior.addLink("0", from, to);
-      integrator.property.initVal = NaN;
+      integrator.property.initVal = "NaN";
       expect(integrator.check()).toBe(false);
     });
     it("If the inport is no connected, check() should return false", () => {

@@ -1,4 +1,4 @@
-import { setBehavior, Constant, Gain, Integrator, Scope } from "../src/behavior";
+import { setBehavior, Constant, Gain, Integrator, Scope, Arithmetic } from "../src/behavior";
 
 describe("Test setBehavior", () => {
   it("Should make Constant", () => {
@@ -16,5 +16,9 @@ describe("Test setBehavior", () => {
   it("Should make Scope", () => {
     const scope = setBehavior(0, "Scope");
     expect(scope instanceof Scope).toBe(true);
+  });
+  it("Should make ArithmeticOperations", () => {
+    const arithmetic = setBehavior(0, "Arithmetic");
+    expect(arithmetic instanceof Arithmetic).toBe(true);
   });
 });

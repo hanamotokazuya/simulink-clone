@@ -21,7 +21,8 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
           action.behavior.name,
           Object.entries(action.behavior.property),
         ];
-        const inputParams = dialogContent[1].map((e) => String(e[1]));
+        const inputParams = dialogContent[1].map((e) => e[1]);
+        if (inputParams.length === 0) return state;
         return {
           ...state,
           dialogContent,
@@ -36,11 +37,11 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
       case "CLOSE_DIALOG":
         return { ...state, inputParams: [], openDialog: false, blockId: "" };
       case "SET_PROPERTY":
-        const newProperty: { [key in string]: number } = {};
+        const newProperty: { [key in string]: string } = {};
         let behavior = Behavior.behaviors[state.blockId];
         if (state.blockId) {
           state.dialogContent[1].forEach(
-            ([key, _], i) => (newProperty[key] = Number(state.inputParams[i]))
+            ([key, _], i) => (newProperty[key] = state.inputParams[i])
           );
           if (behavior) {
             behavior.property = newProperty;
@@ -48,6 +49,11 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
           }
         }
         return { ...state, inputParams: [], openDialog: false, blockId: "" };
+      case "OPEN_SCOPE":
+        console.log("HOGEHOGE");
+        return { ...state, selectedScope: action.scope };
+      case "CLOSE_SCOPE":
+        return { ...state, selectedScope: undefined };
       default:
         return state;
     }
@@ -59,6 +65,7 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
     openDialog: false,
     inputParams: [],
     blockId: "",
+    selectedScope: undefined,
   };
   const [state, action] = useReducer(events, initializeState);
   return <StateContext.Provider value={{ state, action }}>{children}</StateContext.Provider>;

@@ -5,19 +5,19 @@ import { Behavior } from "./behavior.class";
  */
 export class Constant extends Behavior {
   name: string;
-  property: { constant: number };
+  property: { constant: string };
   constructor(id: number, constant: number) {
     super();
     this.id = id;
     this.name = "Constant";
-    this.property = { constant };
+    this.property = { constant: String(constant) };
     this.inportNum = 0;
     this.addBehavior(String(id));
-    this.oldValue = [this.property.constant];
+    this.oldValue = [Number(this.property.constant)];
   }
   init() {
     this.steps = 0;
-    this.oldValue = [this.property.constant];
+    this.oldValue = [Number(this.property.constant)];
   }
   out(steps: number) {
     if (this.steps === steps) {
@@ -28,7 +28,7 @@ export class Constant extends Behavior {
   }
   check() {
     if (
-      !isNaN(this.property.constant) // constant は数値であるか
+      !isNaN(Number(this.property.constant)) // constant は数値であるか
     ) {
       return true;
     } else {

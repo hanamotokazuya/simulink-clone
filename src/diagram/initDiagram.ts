@@ -1,4 +1,5 @@
 import { fabric } from "fabric";
+import { Scope } from "../behavior";
 import { Node, Inport, Outport, PaletteNode, makeLink } from "../block";
 import { Action } from "../types/context";
 
@@ -25,7 +26,7 @@ export const initDiagram = (
   // ***************************************************************************
   const palette = new fabric.Canvas(paletteId, { width: 200, height: 500 });
   let selectedPaletteElement: fabric.Object | undefined = undefined;
-  const paletteElementName = ["Constant", "Gain", "Integrator", "Scope"];
+  const paletteElementName = ["Constant", "Gain", "Integrator", "Scope", "Arithmetic"];
   // Create Palette elements
   const elements = paletteElementName.map((name, i) => {
     let posX = 50;
@@ -153,6 +154,9 @@ export const initDiagram = (
     console.log("DBLCLICK");
     if (e.target instanceof Node) {
       action({ type: "OPEN_DIALOG", behavior: e.target.behavior });
+      if (e.target.behavior instanceof Scope) {
+        action({ type: "OPEN_SCOPE", scope: e.target.behavior });
+      }
     }
   });
 

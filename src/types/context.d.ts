@@ -1,4 +1,4 @@
-import { Behavior } from "../behavior";
+import { Behavior, Scope } from "../behavior";
 import { fabric } from "fabric";
 
 export type State = {
@@ -8,9 +8,18 @@ export type State = {
   openDialog: boolean;
   inputParams: string[];
   blockId: string;
+  selectedScope: Scope | undefined;
 };
-export type DialogContent = [string, [string, number][]];
-export type Action = TEST | INIT | OPEN_DIALOG | CLOSE_DIALOG | SET_PROPERTY | CHANGE_PARAMETER;
+export type DialogContent = [string, [string, string][]];
+export type Action =
+  | TEST
+  | INIT
+  | OPEN_DIALOG
+  | CLOSE_DIALOG
+  | SET_PROPERTY
+  | CHANGE_PARAMETER
+  | OPEN_SCOPE
+  | CLOSE_SCOPE;
 
 type TEST = {
   type: "TEST";
@@ -36,4 +45,11 @@ type CHANGE_PARAMETER = {
   type: "CHANGE_PARAMETER";
   idx: number;
   value: string;
+};
+type OPEN_SCOPE = {
+  type: "OPEN_SCOPE";
+  scope: Scope;
+};
+type CLOSE_SCOPE = {
+  type: "CLOSE_SCOPE";
 };
