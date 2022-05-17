@@ -1,23 +1,50 @@
 import { Behavior } from "../behavior";
-import { useState } from "react";
+import { useStateContext } from "../context/StateContext";
+import { useEffect } from "react";
+import paletteIcon from "../../public/border_all_black_24dp.svg";
+import playIcon from "../../public/play_arrow_black_24dp.svg";
+import Image from "next/image";
 
-const Bar: React.FC = () => {
-  const READY_COLOR = "bg-blue-400";
-  const RUNNING_COLOR = "bg-red-400";
-  const FINISHED_COLOR = "bg-green-400";
-  const [execPhase, setExecPhase] = useState(READY_COLOR);
+const MenuBar: React.FC = () => {
+  const {
+    state: { status },
+    action,
+  } = useStateContext();
   const handleExec = () => {
-    setExecPhase(RUNNING_COLOR);
-    Behavior.run();
-    setExecPhase(FINISHED_COLOR);
-    console.log(Behavior.results);
+    action({ type: "CHANGE_STATUS", status: "START" });
   };
+  useEffect(() => {
+    if (status === "START") {
+      console.log("START");
+      action({ type: "CHANGE_STATUS", status: "INITIALIZING" });
+    } else if (status === "INITIALIZING") {
+      console.log("INITIALIZING");
+      Behavior.init();
+      action({ type: "CHANGE_STATUS", status: "CHECKING" });
+    } else if (status === "CHECKING") {
+      console.log("CHECKING");
+      if (Behavior.check()) {
+        action({ type: "CHANGE_STATUS", status: "RUNNING" });
+      } else {
+        throw new Error("ERROR!");
+      }
+    } else if (status === "RUNNING") {
+      console.log("RUNNNING");
+      Behavior.run();
+      action({ type: "CHANGE_STATUS", status: "FINISHED" });
+    }
+  }, [status, action]);
 
   return (
-    <div className="h-10 bg-gray-200 flex items-center z-50">
-      <div className={`${execPhase} w-8 h-8 rounded-full`} onClick={handleExec}></div>
+    <div className="h-8 bg-gray-200 flex items-center z-50 gap-2 pl-2">
+      <div className="w-8 h-8 cursor-pointer" onClick={handleExec}>
+        <Image src={playIcon} width={32} height={32} alt="playIcon" />
+      </div>
+      <div className="w-8 h-8 cursor-pointer">
+        <Image src={paletteIcon} width={32} height={32} alt="paletteIcon" />
+      </div>
     </div>
   );
 };
 
-export default Bar;
+export default MenuBar;
