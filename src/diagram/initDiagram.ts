@@ -24,7 +24,7 @@ export const initDiagram = (
   // ***************************************************************************
   // Palette -------------------------------------------------------------------
   // ***************************************************************************
-  const palette = new fabric.Canvas(paletteId, { width: 200, height: 500 });
+  const palette = new fabric.Canvas(paletteId, { width: 200, height: 700 });
   let selectedPaletteElement: fabric.Object | undefined = undefined;
   const paletteElementName = ["Constant", "Gain", "Integrator", "Scope", "Arithmetic"];
   // Create Palette elements
@@ -53,7 +53,7 @@ export const initDiagram = (
   // ***************************************************************************
   // Diagram -------------------------------------------------------------------
   // ***************************************************************************
-  const diagram = new fabric.Canvas(diagramId, { width: 500, height: 500 });
+  const diagram = new fabric.Canvas(diagramId, { width: 1500, height: 700 });
   // Block群とdiagramを紐づけるための初期化処理
   Node.init(diagram);
   let activePort: Inport | Outport | undefined = undefined;
@@ -157,6 +157,19 @@ export const initDiagram = (
       if (e.target.behavior instanceof Scope) {
         action({ type: "OPEN_SCOPE", scope: e.target.behavior });
       }
+    }
+  });
+
+  // MOUSE:WHEEL
+  diagram.on("mouse:wheel", (e) => {
+    e.e.preventDefault();
+    const ctrlFlag = e.e.ctrlKey;
+    if (ctrlFlag) {
+      const mouseX = e.e.clientX;
+      const mouseY = e.e.clientY;
+      const deltaY = e.e.deltaY;
+      let zoom = diagram.getZoom();
+      diagram.zoomToPoint(new fabric.Point(mouseX, mouseY), zoom + deltaY / 2400);
     }
   });
 

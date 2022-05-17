@@ -12,8 +12,8 @@ const WorkSpace: React.FC = () => {
     <>
       <DialogBox />
       <div className="flex">
-        <canvas className="border-2 border-black" id="diagram" />
         <canvas className="border-2 border-black" id="palette" />
+        <canvas className="border-2 border-black" id="diagram" />
       </div>
     </>
   );
