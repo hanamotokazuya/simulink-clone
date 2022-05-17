@@ -1,5 +1,6 @@
 import { Block, Inport, Outport, makeInport, makeOutport } from "./index";
 import { Behavior, setBehavior } from "../behavior";
+import { fabric } from "fabric";
 
 export class Node extends Block {
   static diagram: fabric.Canvas | undefined = undefined;
@@ -29,42 +30,6 @@ export class Node extends Block {
     this.groupedObj[1].text = this.behavior.toString();
     this.addBlock(this.id);
   }
-  calcSurrroundingPos() {
-    this.inport.forEach((inport, i) => {
-      inport.left = this.left;
-      inport.top =
-        this.top +
-        ((1 + i) * (this.height * this.scaleY)) / (this.inportNum + 1) -
-        inport.height / 2;
-      if (inport.link && inport.link.path && Array.isArray(inport.link.path[1])) {
-        inport.link.dirty = true;
-        inport.link.path[1][1] = inport.left;
-        inport.link.path[1][2] = inport.top + inport.width / 2;
-        inport.link.setCoords();
-      }
-      inport.setCoords();
-    });
-    this.outport.forEach((outport, i) => {
-      outport.left = this.left + this.width * this.scaleX + outport.height;
-      outport.top =
-        this.top +
-        ((1 + i) * (this.height * this.scaleY)) / (this.outportNum + 1) -
-        outport.height / 2;
-      if (outport.link && outport.link.path && Array.isArray(outport.link.path[0])) {
-        outport.link.dirty = true;
-        outport.link.path[0][1] = outport.left - outport.height;
-        outport.link.path[0][2] = outport.top + outport.width / 2;
-        outport.link.setCoords();
-      }
-      outport.setCoords();
-    });
-  }
-  out(): fabric.Object[] {
-    return [this, ...this.inport, ...this.outport];
-  }
-  addBlock(key: number) {
-    Node.nodes[key] = this;
-  }
   static removeBlock(key: number) {
     delete Node.nodes[key];
   }
@@ -77,5 +42,54 @@ export class Node extends Block {
   }
   static init(diagram: fabric.Canvas) {
     this.diagram = diagram;
+  }
+  addBlock(key: number) {
+    Node.nodes[key] = this;
+  }
+  out(): fabric.Object[] {
+    return [this, ...this.inport, ...this.outport];
+  }
+  updateSurrroundingPos() {
+    this.inport.forEach((inport, i) => {
+      this.updatePortAndLinkPos(inport, i);
+    });
+    this.outport.forEach((outport, i) => {
+      this.updatePortAndLinkPos(outport, i);
+    });
+  }
+  private updatePortAndLinkPos(port: Inport | Outport, i: number) {
+    const calcTop = (i: number, n: number) =>
+      this.top + ((1 + i) * (this.height * this.scaleY)) / (n + 1) - port.height / 2;
+    port.left =
+      port.name === "inport" ? this.left : this.left + this.width * this.scaleX + port.height;
+    port.top = port.name === "inport" ? calcTop(i, this.inportNum) : calcTop(i, this.outportNum);
+    if (
+      port.link &&
+      port.link.path &&
+      Array.isArray(port.link.path[0]) &&
+      Array.isArray(port.link.path[1])
+    ) {
+      let sLeft: number, sTop: number, eLeft: number, eTop: number;
+      if (port.name === "inport") {
+        [sLeft, sTop] = port.link.path[0].slice(1);
+        [eLeft, eTop] = [port.left, port.top + port.width / 2];
+        port.link.path[1].splice(1, 2, eLeft, eTop);
+      } else {
+        [sLeft, sTop] = [port.left - port.height, port.top + port.width / 2];
+        [eLeft, eTop] = port.link.path[1].slice(1);
+        port.link.path[0].splice(1, 2, sLeft, sTop);
+      }
+      port.link.left = Math.min(sLeft, eLeft);
+      port.link.top = Math.min(sTop, eTop);
+      port.link.width = Math.abs(eLeft - sLeft);
+      port.link.height = Math.abs(eTop - sTop);
+      port.link.pathOffset = new fabric.Point(
+        port.link.width / 2 + port.link.left,
+        port.link.height / 2 + port.link.top
+      );
+      port.link.dirty = true;
+      port.link.setCoords();
+    }
+    port.setCoords();
   }
 }

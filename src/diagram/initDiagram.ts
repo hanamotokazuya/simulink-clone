@@ -91,6 +91,7 @@ export const initDiagram = (
         if (activePort instanceof Outport) {
           const link = makeLink(activePort, e.target);
           diagram.add(link);
+          link.sendToBack();
           e.target.link = activePort.link = link;
           activePort = undefined;
           // 押下されたポートと記憶したポートが両方ともインポートであるとき，
@@ -105,6 +106,7 @@ export const initDiagram = (
         if (activePort instanceof Inport) {
           const link = makeLink(e.target, activePort);
           diagram.add(link);
+          link.sendToBack();
           e.target.link = activePort.link = link;
           activePort = undefined;
           // 押下されたポートと記憶したポートが両方ともアウトポートであるとき，
@@ -122,13 +124,13 @@ export const initDiagram = (
   // OBJECT:SCALING
   diagram.on("object:scaling", (e) => {
     // ブロックとポート・リンクの位置を連動させる処理
-    if (e.target instanceof Node) e.target.calcSurrroundingPos();
+    if (e.target instanceof Node) e.target.updateSurrroundingPos();
   });
 
   // OBJECT:MOVING
   diagram.on("object:moving", (e) => {
     // ブロックとポート・リンクの位置を連動させる処理
-    if (e.target instanceof Node) e.target.calcSurrroundingPos();
+    if (e.target instanceof Node) e.target.updateSurrroundingPos();
   });
 
   // MOUSE:OVER
@@ -164,9 +166,9 @@ export const initDiagram = (
   diagram.on("mouse:wheel", (e) => {
     e.e.preventDefault();
     const ctrlFlag = e.e.ctrlKey;
-    if (ctrlFlag) {
-      const mouseX = e.e.clientX;
-      const mouseY = e.e.clientY;
+    if (ctrlFlag && e.pointer) {
+      const mouseX = e.pointer.x;
+      const mouseY = e.pointer.y;
       const deltaY = e.e.deltaY;
       let zoom = diagram.getZoom();
       diagram.zoomToPoint(new fabric.Point(mouseX, mouseY), zoom + deltaY / 2400);
