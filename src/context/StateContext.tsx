@@ -54,6 +54,8 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
         return { ...state, selectedScope: action.scope };
       case "CLOSE_SCOPE":
         return { ...state, selectedScope: undefined };
+      case "CHANGE_STATUS":
+        return { ...state, status: action.status };
       default:
         return state;
     }
@@ -66,6 +68,7 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
     inputParams: [],
     blockId: "",
     selectedScope: undefined,
+    status: "READY",
   };
   const [state, action] = useReducer(events, initializeState);
   return <StateContext.Provider value={{ state, action }}>{children}</StateContext.Provider>;

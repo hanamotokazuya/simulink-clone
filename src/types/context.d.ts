@@ -1,6 +1,7 @@
 import { Behavior, Scope } from "../behavior";
 import { fabric } from "fabric";
 
+type Status = "READY" | "START" | "INITIALIZING" | "CHECKING" | "RUNNING" | "FINISHED";
 export type State = {
   diagram: fabric.Canvas;
   palette: fabric.Canvas;
@@ -9,6 +10,7 @@ export type State = {
   inputParams: string[];
   blockId: string;
   selectedScope: Scope | undefined;
+  status: Status;
 };
 export type DialogContent = [string, [string, string][]];
 export type Action =
@@ -19,7 +21,9 @@ export type Action =
   | SET_PROPERTY
   | CHANGE_PARAMETER
   | OPEN_SCOPE
-  | CLOSE_SCOPE;
+  | CLOSE_SCOPE
+  | RUN
+  | FINISH;
 
 type TEST = {
   type: "TEST";
@@ -52,4 +56,8 @@ type OPEN_SCOPE = {
 };
 type CLOSE_SCOPE = {
   type: "CLOSE_SCOPE";
+};
+type CHANGE_STATUS = {
+  type: "CHANGE_STATUS";
+  status: Status;
 };
