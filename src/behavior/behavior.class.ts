@@ -5,7 +5,9 @@ export abstract class Behavior {
   static behaviors: { [key in string]: Behavior } = {};
   static endTime = 10;
   static samplingTime = 0.1;
-  static time = _.range(0, this.endTime + 0.0001, this.samplingTime);
+  static time = _.range(0, this.endTime + 0.0001, this.samplingTime).map(
+    (v) => Math.round(v * 10 ** 5) / 10 ** 5
+  );
   static endPointBehaviors: { [key in string]: Behavior } = {};
   static links: Links = {};
   // static results: (number[] | undefined)[][] = [[]];
@@ -62,13 +64,15 @@ export abstract class Behavior {
       }
     }
   }
-  private static init() {
-    this.time = _.range(0, this.endTime + 0.0001, this.samplingTime);
+  static init() {
+    this.time = _.range(0, this.endTime + 0.0001, this.samplingTime).map(
+      (v) => Math.round(v * 10 ** 5) / 10 ** 5
+    );
     Object.values(this.behaviors).forEach((behavior) => behavior.init());
     // this.results = [[]];
     this.results = {};
   }
-  private static check() {
+  static check() {
     return !Object.values(this.behaviors)
       .map((behavior) => behavior?.check())
       .includes(false);
@@ -77,16 +81,11 @@ export abstract class Behavior {
     return Object.values(this.endPointBehaviors).map((behavior) => behavior.out(steps));
   }
   static run() {
-    this.init();
-    if (this.check()) {
-      const keys = Object.keys(this.endPointBehaviors); // 要検討 順序が保証されない可能性がある
-      const results = this.time.map((_, i) => this.out(i + 1));
-      keys.forEach((key, i) => {
-        this.results[key] = results.map((result) => result[i]);
-      });
-    } else {
-      throw new Error("Error!");
-    }
+    const keys = Object.keys(this.endPointBehaviors); // 要検討 順序が保証されない可能性がある
+    const results = this.time.map((_, i) => this.out(i + 1));
+    keys.forEach((key, i) => {
+      this.results[key] = results.map((result) => result[i]);
+    });
     console.log(this.behaviors);
   }
   abstract init(): void;

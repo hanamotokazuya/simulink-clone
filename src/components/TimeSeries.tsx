@@ -21,14 +21,8 @@ const options = {
       position: "top" as const,
     },
     title: {
-      display: true,
+      display: false,
       text: "Chart.js Line Chart",
-    },
-  },
-  LinearScale: {
-    x: {
-      type: "timeseries",
-      unit: "second",
     },
   },
 };
@@ -36,7 +30,7 @@ const options = {
 const data = {
   datasets: [
     {
-      label: "Dataset 1",
+      label: "Scope",
       data: {},
       borderColor: "rgb(255, 99, 132)",
       backgroundColor: "rgba(255, 99, 132, 0.5)",
@@ -57,12 +51,17 @@ const TimeSeries = () => {
   return (
     <>
       {state.selectedScope !== undefined && (
-        <>
-          <div className="w-20, h-20 bg-green-400" onClick={() => action({ type: "CLOSE_SCOPE" })}>
-            x
+        <div className="fixed top-0 left-0 z-50 flex justify-center w-screen">
+          <div className="mt-10 bg-white w-4/5 border-2 border-black rounded">
+            <div
+              className="bg-green-400 text-right px-2 cursor-pointer"
+              onClick={() => action({ type: "CLOSE_SCOPE" })}
+            >
+              ×
+            </div>
+            <Line options={options} data={data} />
           </div>
-          <Line options={options} data={data} />
-        </>
+        </div>
       )}
     </>
   );

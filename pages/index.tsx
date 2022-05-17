@@ -1,15 +1,17 @@
 import type { NextPage } from "next";
 import Layout from "../src/components/Layout";
 import WorkSpace from "../src/components/WorkSpace";
-import Bar from "../src/components/Bar";
+import MenuBar from "../src/components/MenuBar";
 import TimeSeries from "../src/components/TimeSeries";
+import StatusBar from "../src/components/StatusBar";
 
 const Home: NextPage = () => {
   return (
     <Layout>
-      <Bar />
+      <MenuBar />
       <WorkSpace />
       <TimeSeries />
+      <StatusBar />
     </Layout>
   );
 };
