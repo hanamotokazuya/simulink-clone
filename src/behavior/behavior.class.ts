@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { Links, PortOfBlock } from "../types/behavior";
+import { Node } from "../block";
 
 export abstract class Behavior {
   static behaviors: { [key in string]: Behavior } = {};
@@ -10,7 +11,6 @@ export abstract class Behavior {
   );
   static endPointBehaviors: { [key in string]: Behavior } = {};
   static links: Links = {};
-  // static results: (number[] | undefined)[][] = [[]];
   static results: { [key in string]: number[][] } = {};
   id: number;
   name: string;
@@ -32,17 +32,23 @@ export abstract class Behavior {
     this.oldValue = [0];
     this.steps = 0;
   }
+  static removeNode(node: Node) {
+    this.removeBehavior(String(node.behavior.id));
+    this.removeEndpointBehavior(String(node.behavior.id));
+    const inports = node.inport;
+    const outports = node.outport;
+    inports.forEach((inport) => {
+      inport.link && this.removeLink(inport.link.id);
+    });
+    outports.forEach((outport) => {
+      outport.link && this.removeLink(outport.link.id);
+    });
+  }
   protected addBehavior(key: string) {
     Behavior.behaviors[key] = this;
   }
-  protected removeBehavior(key: string) {
-    delete Behavior.behaviors[key];
-  }
   protected addEndpointBehavior(key: string) {
     Behavior.endPointBehaviors[key] = this;
-  }
-  protected removeEndpointBehavior(key: string) {
-    delete Behavior.endPointBehaviors[key];
   }
   static addLink(key: string, from: PortOfBlock, to: PortOfBlock) {
     this.links[key] = { from, to };
@@ -52,6 +58,12 @@ export abstract class Behavior {
     if (behavior) {
       behavior.inputLink[toPortId] = fromBlockId;
     }
+  }
+  protected static removeBehavior(key: string) {
+    delete this.behaviors[key];
+  }
+  protected static removeEndpointBehavior(key: string) {
+    delete this.endPointBehaviors[key];
   }
   static removeLink(key: number) {
     const to = this.links[key]?.to;

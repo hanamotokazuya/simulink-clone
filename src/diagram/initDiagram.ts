@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { Scope } from "../behavior";
+import { Behavior, Scope } from "../behavior";
 import { Node, Inport, Outport, PaletteNode, makeLink } from "../block";
 import { Action } from "../types/context";
 
@@ -56,11 +56,41 @@ export const initDiagram = (
   const diagram = new fabric.Canvas(diagramId, { width: 1500, height: 700 });
   // Block群とdiagramを紐づけるための初期化処理
   Node.init(diagram);
-  let activePort: Inport | Outport | undefined = undefined;
+  let activeObj: fabric.Object | null = null;
   // diagram behavior ----------------------------------------------------------
 
   // MOUSE:DOWN
   diagram.on("mouse:down", (e) => {
+    // ノードが選択されている状態でCtrl+clickされたとき，
+    // 当該ノードとノードに紐づくポートとリンクを削除する．
+    if (e.e.ctrlKey) {
+      if (activeObj instanceof Node) {
+        const inports = activeObj.inport;
+        const outports = activeObj.outport;
+        inports.forEach((inport) => {
+          inport.link && diagram.remove(inport.link);
+          diagram.remove(inport);
+        });
+        outports.forEach((outport) => {
+          outport.link && diagram.remove(outport.link);
+          diagram.remove(outport);
+        });
+        diagram.remove(activeObj);
+        Behavior.removeNode(activeObj);
+        activeObj = null;
+        return;
+      }
+      // ポートが選択されている状態でCtrl+clickされたとき，
+      // 当該ポートに紐づくリンクを削除する．
+      if (activeObj instanceof Inport || activeObj instanceof Outport) {
+        if (activeObj.link) {
+          diagram.remove(activeObj.link);
+          Behavior.removeLink(activeObj.link.id);
+          activeObj = null;
+          return;
+        }
+      }
+    }
     // パレットの要素が選択されているとき，
     // 押下した場所に選択されている要素に該当するブロックを生成する．
     // 処理完了後，パレットの選択を解除する．
@@ -76,47 +106,47 @@ export const initDiagram = (
       }
     }
 
-    // ポートが選択されていない場合にポートが押下されたとき，
-    // 当該ポートを記憶する処理
-    if (!activePort) {
-      if (e.target instanceof Inport || e.target instanceof Outport) {
-        activePort = e.target;
+    // オブジェクトが選択されていない場合にオブジェクトが押下されたとき，
+    // 当該オブジェクトを記憶する処理
+    if (!activeObj) {
+      if (e.target) {
+        activeObj = e.target;
       }
-      // ポートが選択されている場合の処理
+      // オブジェクトが選択されている場合の処理
     } else {
-      // 押下されたポートがインポートかつ記憶したポートがアウトポートであるとき，
+      // 押下されたオブジェクトがインポートかつ記憶したオブジェクトがアウトポートであるとき，
       // 両者間にてリンクを生成する．
-      // 処理完了後，ポートの選択を解除する．
+      // 処理完了後，オブジェクトの選択を解除する．
       if (e.target instanceof Inport) {
-        if (activePort instanceof Outport) {
-          const link = makeLink(activePort, e.target);
+        if (activeObj instanceof Outport) {
+          const link = makeLink(activeObj, e.target);
           diagram.add(link);
           link.sendToBack();
-          e.target.link = activePort.link = link;
-          activePort = undefined;
-          // 押下されたポートと記憶したポートが両方ともインポートであるとき，
+          activeObj = null;
+          // 押下されたオブジェクトと記憶したオブジェクトが両方ともインポートであるとき，
           // 記憶したポートを押下されたポートに更新する．
         } else {
-          activePort = e.target;
+          activeObj = e.target;
         }
-        // 押下されたポートがアウトポートかつ記憶したポートがインポートであるとき，
+        // 押下されたオブジェクトがアウトポートかつ記憶したオブジェクトがインポートであるとき，
         // 両者間にてリンクを生成する．
-        // 処理完了後，ポートの選択を解除する．
+        // 処理完了後，オブジェクトの選択を解除する．
       } else if (e.target instanceof Outport) {
-        if (activePort instanceof Inport) {
-          const link = makeLink(e.target, activePort);
+        if (activeObj instanceof Inport) {
+          const link = makeLink(e.target, activeObj);
           diagram.add(link);
           link.sendToBack();
-          e.target.link = activePort.link = link;
-          activePort = undefined;
-          // 押下されたポートと記憶したポートが両方ともアウトポートであるとき，
+          activeObj = null;
+          // 押下されたオブジェクトと記憶したオブジェクトが両方ともアウトポートであるとき，
           // 記憶したポートを押下されたポートに更新する．
         } else {
-          activePort = e.target;
+          activeObj = e.target;
         }
-        // ポートが押下されなかった場合，ポートの選択を解除する．
+        // そのほかの条件下では，選択オブジェクトを更新する．
       } else {
-        activePort = undefined;
+        if (e.target !== undefined) {
+          activeObj = e.target;
+        }
       }
     }
   });

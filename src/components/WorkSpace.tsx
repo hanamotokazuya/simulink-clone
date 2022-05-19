@@ -5,8 +5,8 @@ import DialogBox from "./DialogBox";
 const WorkSpace: React.FC = () => {
   const { action } = useStateContext();
   useEffect(() => {
-    const [diagram, palette] = initDiagram("diagram", "palette", action);
-    action({ type: "INIT", diagram, palette });
+    const [diagramObj, paletteObj] = initDiagram("diagram", "palette", action);
+    action({ type: "INIT", diagram: diagramObj, palette: paletteObj });
   }, [action]);
   return (
     <>

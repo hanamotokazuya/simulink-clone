@@ -11,7 +11,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { useStateContext } from "../context/StateContext";
 import { useEffect } from "react";
-import { Behavior } from "../behavior";
+import { Behavior, Scope } from "../behavior";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const options = {
@@ -41,7 +41,7 @@ const data = {
 const TimeSeries = () => {
   const { state, action } = useStateContext();
   useEffect(() => {
-    if (state.selectedScope !== undefined) {
+    if (state.selectedScope instanceof Scope) {
       if (Object.keys(Behavior.results).length > 0) {
         const result = Behavior.results[state.selectedScope.id];
         data.datasets[0].data = Behavior.time.map((t, i) => ({ x: String(t), y: result[i][0] }));
@@ -50,7 +50,7 @@ const TimeSeries = () => {
   }, [state.selectedScope]);
   return (
     <>
-      {state.selectedScope !== undefined && (
+      {state.selectedScope instanceof Scope && (
         <div className="fixed top-0 left-0 z-50 flex justify-center w-screen">
           <div className="mt-10 bg-white w-4/5 border-2 border-black rounded">
             <div

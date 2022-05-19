@@ -12,6 +12,7 @@ export const makeLink = (outport: Outport, inport: Inport) => {
   const key = String(link.id);
   const from = { [String(outport.parent.id)]: outport.id };
   const to = { [String(inport.parent.id)]: inport.id };
+  inport.link = outport.link = link;
   Behavior.addLink(key, from, to);
   return link;
 };

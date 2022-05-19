@@ -1,4 +1,5 @@
 import { Behavior, Scope } from "../behavior";
+import { Node } from "../block";
 import { fabric } from "fabric";
 
 type Status = "READY" | "START" | "INITIALIZING" | "CHECKING" | "RUNNING" | "FINISHED";
@@ -22,8 +23,7 @@ export type Action =
   | CHANGE_PARAMETER
   | OPEN_SCOPE
   | CLOSE_SCOPE
-  | RUN
-  | FINISH;
+  | CHANGE_STATUS;
 
 type TEST = {
   type: "TEST";
