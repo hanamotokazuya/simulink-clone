@@ -117,8 +117,8 @@ export const initDiagram = (
       // 押下されたオブジェクトがインポートかつ記憶したオブジェクトがアウトポートであるとき，
       // 両者間にてリンクを生成する．
       // 処理完了後，オブジェクトの選択を解除する．
-      if (e.target instanceof Inport) {
-        if (activeObj instanceof Outport) {
+      if (e.target instanceof Inport && !e.target.link) {
+        if (activeObj instanceof Outport && activeObj.parent !== e.target.parent) {
           const link = makeLink(activeObj, e.target);
           diagram.add(link);
           link.sendToBack();
@@ -132,7 +132,11 @@ export const initDiagram = (
         // 両者間にてリンクを生成する．
         // 処理完了後，オブジェクトの選択を解除する．
       } else if (e.target instanceof Outport) {
-        if (activeObj instanceof Inport) {
+        if (
+          activeObj instanceof Inport &&
+          !activeObj.link &&
+          activeObj.parent !== e.target.parent
+        ) {
           const link = makeLink(e.target, activeObj);
           diagram.add(link);
           link.sendToBack();
