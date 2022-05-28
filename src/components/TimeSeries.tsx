@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useStateContext } from "../context/StateContext";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { Behavior, Scope } from "../behavior";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -40,7 +40,7 @@ const data = {
 
 const TimeSeries = () => {
   const { state, action } = useStateContext();
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (state.selectedScope instanceof Scope) {
       if (Object.keys(Behavior.results).length > 0) {
         const result = Behavior.results[state.selectedScope.id];

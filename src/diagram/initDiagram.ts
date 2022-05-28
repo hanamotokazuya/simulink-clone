@@ -199,9 +199,10 @@ export const initDiagram = (
   diagram.on("mouse:dblclick", (e) => {
     console.log("DBLCLICK");
     if (e.target instanceof Node) {
-      action({ type: "OPEN_DIALOG", behavior: e.target.behavior });
       if (e.target.behavior instanceof Scope) {
         action({ type: "OPEN_SCOPE", scope: e.target.behavior });
+      } else {
+        action({ type: "OPEN_DIALOG", behavior: e.target.behavior });
       }
     }
   });
