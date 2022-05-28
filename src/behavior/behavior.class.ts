@@ -91,6 +91,10 @@ export abstract class Behavior {
   }
   static check() {
     Object.values(this.behaviors).forEach((behavior) => behavior?.check());
+    (this.endTime < 0 || this.endTime > 100) &&
+      this.errorMessages.push("終了時間は0-100の間に設定してください。");
+    this.samplingTime < 0.01 &&
+      this.errorMessages.push("サンプリング時間は0.01以上に設定してください。");
   }
   private static out(steps: number): number[][] {
     return Object.values(this.endPointBehaviors).map((behavior) => behavior.out(steps));

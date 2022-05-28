@@ -16,6 +16,11 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const options = {
   responsive: true,
+  elements: {
+    point: {
+      radius: 0,
+    },
+  },
   plugins: {
     legend: {
       position: "top" as const,
@@ -23,6 +28,13 @@ const options = {
     title: {
       display: false,
       text: "Chart.js Line Chart",
+    },
+  },
+  scales: {
+    r: {
+      grid: {
+        display: false,
+      },
     },
   },
 };
