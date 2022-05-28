@@ -162,6 +162,7 @@ export const initDiagram = (
       node.dirty = true;
     });
     diagram.renderAll();
+    console.log(e.target);
   });
 
   // OBJECT:SCALING
