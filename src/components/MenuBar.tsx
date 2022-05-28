@@ -57,7 +57,9 @@ const MenuBar: React.FC = () => {
       <div className="mr-2">終了時間:</div>
       <input
         type="number"
-        className="w-8"
+        max="100"
+        min="0"
+        className="w-14"
         value={endTime}
         onChange={(e) => setEndTime(e.target.value)}
       />
@@ -65,7 +67,9 @@ const MenuBar: React.FC = () => {
       <div className="mr-2">サンプリング時間: </div>
       <input
         type="number"
-        className="w-8"
+        min="0.01"
+        step="0.01"
+        className="w-14"
         value={samplingTime}
         onChange={(e) => setSamplingTime(e.target.value)}
       />
