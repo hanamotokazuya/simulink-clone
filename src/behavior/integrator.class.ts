@@ -1,5 +1,8 @@
 import { Behavior } from "./behavior.class";
 
+/**
+ * 積分のふるまいを司るクラス
+ */
 export class Integrator extends Behavior {
   name: string;
   property: { initVal: string };

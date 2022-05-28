@@ -2,6 +2,10 @@ import { useEffect } from "react";
 import { initDiagram } from "..//diagram";
 import { useStateContext } from "../context/StateContext";
 import DialogBox from "./DialogBox";
+
+/**
+ * パレットとダイアグラムを表示する
+ */
 const WorkSpace: React.FC = () => {
   const { action } = useStateContext();
   useEffect(() => {

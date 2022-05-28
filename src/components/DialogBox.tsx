@@ -1,5 +1,8 @@
 import { useStateContext } from "../context/StateContext";
 
+/**
+ * ブロックに付与されているふるまいインスタンスのパラメータを変更するためのダイアログボックス
+ */
 const DialogBox = () => {
   const { state, action } = useStateContext();
   const handleClickChangeParams = (idx: number, value: string) => {

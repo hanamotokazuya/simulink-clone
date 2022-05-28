@@ -2,6 +2,9 @@ import _ from "lodash";
 import { Links, PortOfBlock } from "../types/behavior";
 import { Node } from "../block";
 
+/**
+ * ふるまいのベースとなるクラス
+ */
 export abstract class Behavior {
   static behaviors: { [key in string]: Behavior } = {};
   static endTime = 10;

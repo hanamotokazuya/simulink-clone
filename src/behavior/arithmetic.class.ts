@@ -5,6 +5,9 @@ type Operator = typeof operator[number];
 const isOperator = (name: string): name is Operator => {
   return operator.some((value) => value === name);
 };
+/**
+ * 四則演算のふるまいを司るクラス
+ */
 export class Arithmetic extends Behavior {
   name: string;
   property: { operator: Operator };

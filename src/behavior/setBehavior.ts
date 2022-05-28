@@ -1,5 +1,11 @@
 import * as bv from "./index";
 
+/**
+ * nameに応じたふるまいインスタンスを生成する
+ * @param id
+ * @param name
+ * @returns nameに応じたふるまいインスタンス
+ */
 export const setBehavior = (id: number, name: string): bv.Behavior => {
   switch (name) {
     case "Gain":

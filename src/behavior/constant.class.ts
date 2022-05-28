@@ -1,7 +1,7 @@
 import { Behavior } from "./behavior.class";
 
 /**
- * ブロックに定数のふるまいを与える．
+ * 定数のふるまいを司るクラス
  */
 export class Constant extends Behavior {
   name: string;

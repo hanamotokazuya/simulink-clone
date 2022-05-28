@@ -1,5 +1,8 @@
 import { Behavior } from "./behavior.class";
 
+/**
+ * 乗数のふるまいを司るクラス
+ */
 export class Gain extends Behavior {
   name: string;
   property: { gain: string };

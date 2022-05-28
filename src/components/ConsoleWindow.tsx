@@ -1,5 +1,8 @@
 import { useStateContext } from "../context/StateContext";
 
+/**
+ * エラーメッセージを表示するためのコンソールウィンドウ
+ */
 const ConsoleWindow: React.FC = () => {
   const {
     state: { errorMessages },

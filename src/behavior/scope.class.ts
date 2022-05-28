@@ -1,5 +1,8 @@
 import { Behavior } from "./behavior.class";
 
+/**
+ * 描画のふるまいを司るクラス
+ */
 export class Scope extends Behavior {
   name: string;
   property: {};

@@ -38,6 +38,9 @@ const data = {
   ],
 };
 
+/**
+ * Scopeブロックに対応した実行結果を表示するチャート
+ */
 const TimeSeries = () => {
   const { state, action } = useStateContext();
   useLayoutEffect(() => {

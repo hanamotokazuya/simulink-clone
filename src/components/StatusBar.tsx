@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useStateContext } from "../context/StateContext";
 
+/**
+ * 実行状態を表示するステータスバー
+ */
 const StatusBar: React.FC = () => {
   const {
     state: { status },
