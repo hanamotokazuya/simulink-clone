@@ -39,10 +39,10 @@ export abstract class Behavior {
     const inports = node.inport;
     const outports = node.outport;
     inports.forEach((inport) => {
-      inport.link && this.removeLink(inport.link.id);
+      inport.links.forEach((link) => this.removeLink(link.id));
     });
     outports.forEach((outport) => {
-      outport.link && this.removeLink(outport.link.id);
+      outport.links.forEach((link) => this.removeLink(link.id));
     });
   }
   protected addBehavior(key: string) {
@@ -98,7 +98,7 @@ export abstract class Behavior {
     keys.forEach((key, i) => {
       this.results[key] = results.map((result) => result[i]);
     });
-    console.log(this.behaviors);
+    // console.log(this.behaviors);
   }
   abstract init(): void;
   abstract check(): void;

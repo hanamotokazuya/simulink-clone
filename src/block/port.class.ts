@@ -6,7 +6,7 @@ export class Port extends fabric.Triangle {
   id: number;
   width: number;
   height: number;
-  link: Link | undefined;
+  links: Link[];
   constructor(block: Node, id: number) {
     super();
     this.parent = block;
@@ -20,6 +20,6 @@ export class Port extends fabric.Triangle {
     this.lockMovementY = true;
     this.objectCaching = false;
     this.selectable = false;
-    this.link = undefined;
+    this.links = [];
   }
 }

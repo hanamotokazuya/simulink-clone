@@ -39,7 +39,7 @@ export const initDiagram = (
 
   // MOUSE:DOWN
   palette.on("mouse:down", (e) => {
-    console.log(e.target);
+    // console.log(e.target);
     // パレット内の要素を押下したとき，当該要素を記憶する処理
     // 記憶された要素はパレット上で青く光る
     if (e.target) {
@@ -65,7 +65,7 @@ export const initDiagram = (
     // ノードが選択されている状態でCtrl+clickされたとき，
     // 当該ノードとノードに紐づくポートとリンクを削除する．
     if (e.target instanceof Inport || e.target instanceof Outport) {
-      console.log(e.target.link);
+      // console.log(e.target.links);
     }
     if (e.e.ctrlKey) {
       if (activeObj instanceof Node) {
@@ -97,7 +97,6 @@ export const initDiagram = (
     // パレットの要素が選択されているとき，
     // 押下した場所に選択されている要素に該当するブロックを生成する．
     // 処理完了後，パレットの選択を解除する．
-    console.log(e.target);
     if (selectedPaletteElement) {
       if (e.pointer && selectedPaletteElement.name) {
         const node = new Node(selectedPaletteElement.name, e.pointer.x, e.pointer.y);
@@ -119,7 +118,7 @@ export const initDiagram = (
       // 押下されたオブジェクトがインポートかつ記憶したオブジェクトがアウトポートであるとき，
       // 両者間にてリンクを生成する．
       // 処理完了後，オブジェクトの選択を解除する．
-      if (e.target instanceof Inport && !e.target.link) {
+      if (e.target instanceof Inport && e.target.links.length === 0) {
         if (activeObj instanceof Outport && activeObj.parent !== e.target.parent) {
           const link = makeLink(activeObj, e.target);
           diagram.add(link);
@@ -136,7 +135,7 @@ export const initDiagram = (
       } else if (e.target instanceof Outport) {
         if (
           activeObj instanceof Inport &&
-          !activeObj.link &&
+          activeObj.links.length === 0 &&
           activeObj.parent !== e.target.parent
         ) {
           const link = makeLink(e.target, activeObj);
@@ -197,7 +196,7 @@ export const initDiagram = (
 
   // MOUSE:DOUBLECLICK
   diagram.on("mouse:dblclick", (e) => {
-    console.log("DBLCLICK");
+    // console.log("DBLCLICK");
     if (e.target instanceof Node) {
       if (e.target.behavior instanceof Scope) {
         action({ type: "OPEN_SCOPE", scope: e.target.behavior });
@@ -224,16 +223,17 @@ export const initDiagram = (
 };
 
 const removeLink = (diagram: fabric.Canvas, port: Inport | Outport) => {
-  if (port.link) {
-    diagram.remove(port.link);
-    const linkId = port.link.id;
+  port.links.forEach((linkObj) => {
+    diagram.remove(linkObj);
+    const linkId = linkObj.id;
     const link = Behavior.links[linkId];
     if (link) {
       const [fromNode, fromPort] = Object.entries(link.from)[0];
       const [toNode, toPort] = Object.entries(link.to)[0];
-      Node.nodes[Number(fromNode)].outport[fromPort].link = undefined;
-      Node.nodes[Number(toNode)].inport[toPort].link = undefined;
+      let links = Node.nodes[Number(fromNode)].outport[fromPort].links;
+      links = links.filter((link) => link.id !== linkId);
+      Node.nodes[Number(toNode)].inport[toPort].links = [];
     }
     Behavior.removeLink(linkId);
-  }
+  });
 };

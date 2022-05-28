@@ -15,24 +15,23 @@ const MenuBar: React.FC = () => {
   };
   useEffect(() => {
     if (status === "START") {
-      console.log("START");
+      // console.log("START");
       action({ type: "CHANGE_STATUS", status: "INITIALIZING" });
     } else if (status === "INITIALIZING") {
-      console.log("INITIALIZING");
+      // console.log("INITIALIZING");
       Behavior.init();
       action({ type: "CHANGE_STATUS", status: "CHECKING" });
     } else if (status === "CHECKING") {
-      console.log("CHECKING");
+      // console.log("CHECKING");
       Behavior.check();
       if (Behavior.errorMessages.length === 0) {
         action({ type: "CHANGE_STATUS", status: "RUNNING" });
       } else {
-        // throw new Error("ERROR!");
-        console.log(Behavior.errorMessages);
+        // console.log(Behavior.errorMessages);
         action({ type: "CHANGE_STATUS", status: "ERROR" });
       }
     } else if (status === "RUNNING") {
-      console.log("RUNNNING");
+      // console.log("RUNNNING");
       Behavior.run();
       action({ type: "CHANGE_STATUS", status: "FINISHED" });
     }
