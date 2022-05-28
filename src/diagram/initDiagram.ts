@@ -39,6 +39,7 @@ export const initDiagram = (
 
   // MOUSE:DOWN
   palette.on("mouse:down", (e) => {
+    console.log(e.target);
     // パレット内の要素を押下したとき，当該要素を記憶する処理
     // 記憶された要素はパレット上で青く光る
     if (e.target) {
@@ -63,32 +64,34 @@ export const initDiagram = (
   diagram.on("mouse:down", (e) => {
     // ノードが選択されている状態でCtrl+clickされたとき，
     // 当該ノードとノードに紐づくポートとリンクを削除する．
+    if (e.target instanceof Inport || e.target instanceof Outport) {
+      console.log(e.target.link);
+    }
     if (e.e.ctrlKey) {
       if (activeObj instanceof Node) {
         const inports = activeObj.inport;
         const outports = activeObj.outport;
         inports.forEach((inport) => {
-          inport.link && diagram.remove(inport.link);
+          removeLink(diagram, inport);
           diagram.remove(inport);
         });
         outports.forEach((outport) => {
-          outport.link && diagram.remove(outport.link);
+          removeLink(diagram, outport);
           diagram.remove(outport);
         });
         diagram.remove(activeObj);
         Behavior.removeNode(activeObj);
         activeObj = null;
+        diagram.renderAll();
         return;
       }
       // ポートが選択されている状態でCtrl+clickされたとき，
       // 当該ポートに紐づくリンクを削除する．
       if (activeObj instanceof Inport || activeObj instanceof Outport) {
-        if (activeObj.link) {
-          diagram.remove(activeObj.link);
-          Behavior.removeLink(activeObj.link.id);
-          activeObj = null;
-          return;
-        }
+        removeLink(diagram, activeObj);
+        activeObj = null;
+        diagram.renderAll();
+        return;
       }
     }
     // パレットの要素が選択されているとき，
@@ -102,7 +105,6 @@ export const initDiagram = (
         selectedPaletteElement.set({ shadow: undefined });
         palette.renderAll();
         selectedPaletteElement = undefined;
-        return;
       }
     }
 
@@ -153,6 +155,14 @@ export const initDiagram = (
         }
       }
     }
+    // NodeTextの再描画
+    diagram.renderAll();
+    const nodes = Object.values(Node.nodes);
+    nodes.forEach((node) => {
+      node.groupedObj[1].width = node.width;
+      node.dirty = true;
+    });
+    diagram.renderAll();
   });
 
   // OBJECT:SCALING
@@ -210,4 +220,19 @@ export const initDiagram = (
   });
 
   return [diagram, palette];
+};
+
+const removeLink = (diagram: fabric.Canvas, port: Inport | Outport) => {
+  if (port.link) {
+    diagram.remove(port.link);
+    const linkId = port.link.id;
+    const link = Behavior.links[linkId];
+    if (link) {
+      const [fromNode, fromPort] = Object.entries(link.from)[0];
+      const [toNode, toPort] = Object.entries(link.to)[0];
+      Node.nodes[Number(fromNode)].outport[fromPort].link = undefined;
+      Node.nodes[Number(toNode)].inport[toPort].link = undefined;
+    }
+    Behavior.removeLink(linkId);
+  }
 };

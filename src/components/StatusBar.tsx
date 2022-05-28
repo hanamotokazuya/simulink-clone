@@ -21,6 +21,9 @@ const StatusBar: React.FC = () => {
         case "FINISHED":
           statusMessage.current.textContent = "実行完了";
           break;
+        case "ERROR":
+          statusMessage.current.textContent = "実行を中止しました";
+          break;
         default:
           break;
       }

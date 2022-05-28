@@ -12,6 +12,7 @@ export abstract class Behavior {
   static endPointBehaviors: { [key in string]: Behavior } = {};
   static links: Links = {};
   static results: { [key in string]: number[][] } = {};
+  static errorMessages: string[];
   id: number;
   name: string;
   inputLink: string[];
@@ -83,11 +84,10 @@ export abstract class Behavior {
     Object.values(this.behaviors).forEach((behavior) => behavior.init());
     // this.results = [[]];
     this.results = {};
+    this.errorMessages = [];
   }
   static check() {
-    return !Object.values(this.behaviors)
-      .map((behavior) => behavior?.check())
-      .includes(false);
+    Object.values(this.behaviors).forEach((behavior) => behavior?.check());
   }
   private static out(steps: number): number[][] {
     return Object.values(this.endPointBehaviors).map((behavior) => behavior.out(steps));
@@ -101,7 +101,7 @@ export abstract class Behavior {
     console.log(this.behaviors);
   }
   abstract init(): void;
-  abstract check(): boolean;
+  abstract check(): void;
   abstract out(steps: number): number[];
   abstract toString(): string;
 }

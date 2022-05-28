@@ -4,7 +4,7 @@ import { fabric } from "fabric";
 
 export class Node extends Block {
   static diagram: fabric.Canvas | undefined = undefined;
-  static nodes: { [key in number]?: Node } = {};
+  static nodes: { [key in number]: Node } = {};
   static idCount: number = 0;
   id: number;
   name: string;

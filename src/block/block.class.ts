@@ -18,8 +18,7 @@ export class Block extends fabric.Group {
           stroke: "black",
         }),
         new fabric.Text(name, {
-          width,
-          height,
+          top: height / 2 - 10,
           textAlign: "center",
           fontSize: 16,
         }),
@@ -32,5 +31,6 @@ export class Block extends fabric.Group {
     this.scaleX = 1;
     this.scaleY = 1;
     this.groupedObj = this._objects as [fabric.Rect, fabric.Text];
+    this.groupedObj[1].width = width;
   }
 }

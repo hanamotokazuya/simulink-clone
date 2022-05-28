@@ -7,6 +7,7 @@ describe("Gain behavior test", () => {
     Behavior.endPointBehaviors = {};
     Behavior.links = {};
     scope = new Scope(0);
+    Behavior.errorMessages = [];
   });
   // Property Test -------------------------------------------------------------
   describe("Property test", () => {
@@ -41,12 +42,15 @@ describe("Gain behavior test", () => {
   // check Test ----------------------------------------------------------------
   describe("check() test", () => {
     it("If the inport is no connected, check() should return false", () => {
-      expect(scope.check()).toBe(false);
+      scope.check();
+      expect(Behavior.errorMessages.length).toBe(1);
       const constant = new Constant(1, 1);
       const from = { [String(constant.id)]: 0 };
       const to = { [String(scope.id)]: 0 };
       Behavior.addLink("0", from, to);
-      expect(scope.check()).toBe(true);
+      Behavior.init();
+      scope.check();
+      expect(Behavior.errorMessages.length).toBe(0);
     });
   });
 

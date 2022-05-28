@@ -28,14 +28,10 @@ export class Gain extends Behavior {
     }
   }
   check() {
-    if (
-      !isNaN(Number(this.property.gain)) && // gainは数値であるか
-      Behavior.behaviors[this.inputLink[0]] instanceof Behavior // 入力ポートは接続されているか
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    isNaN(Number(this.property.gain)) && // gainは数値であるか
+      Behavior.errorMessages.push(`${this.name}${this.id}のパラメータは不正な値です。`);
+    !(Behavior.behaviors[this.inputLink[0]] instanceof Behavior) && // 入力ポートは接続されているか
+      Behavior.errorMessages.push(`${this.name}${this.id}の入力ポートは接続されていません。`);
   }
   toString() {
     return String(this.property.gain);

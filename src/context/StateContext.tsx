@@ -55,7 +55,7 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
       case "CLOSE_SCOPE":
         return { ...state, selectedScope: undefined };
       case "CHANGE_STATUS":
-        return { ...state, status: action.status };
+        return { ...state, status: action.status, errorMessages: Behavior.errorMessages };
       default:
         return state;
     }
@@ -69,6 +69,7 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
     blockId: "",
     selectedScope: undefined,
     status: "READY",
+    errorMessages: [],
   };
   const [state, action] = useReducer(events, initializeState);
   return <StateContext.Provider value={{ state, action }}>{children}</StateContext.Provider>;

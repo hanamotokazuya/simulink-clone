@@ -2,7 +2,7 @@ import { Behavior, Scope } from "../behavior";
 import { Node } from "../block";
 import { fabric } from "fabric";
 
-type Status = "READY" | "START" | "INITIALIZING" | "CHECKING" | "RUNNING" | "FINISHED";
+type Status = "READY" | "START" | "INITIALIZING" | "CHECKING" | "RUNNING" | "FINISHED" | "ERROR";
 export type State = {
   diagram: fabric.Canvas;
   palette: fabric.Canvas;
@@ -12,6 +12,7 @@ export type State = {
   blockId: string;
   selectedScope: Scope | undefined;
   status: Status;
+  errorMessages: string[];
 };
 export type DialogContent = [string, [string, string][]];
 export type Action =

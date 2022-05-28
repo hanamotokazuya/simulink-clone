@@ -7,6 +7,7 @@ describe("Gain behavior test", () => {
     Behavior.endPointBehaviors = {};
     Behavior.links = {};
     gain = new Gain(0, 1);
+    Behavior.errorMessages = [];
   });
   // Property Test -------------------------------------------------------------
   describe("Property test", () => {
@@ -46,15 +47,19 @@ describe("Gain behavior test", () => {
       const to = { [String(gain.id)]: 0 };
       Behavior.addLink("0", from, to);
       gain.property.gain = "NaN";
-      expect(gain.check()).toBe(false);
+      gain.check();
+      expect(Behavior.errorMessages.length).toBe(1);
     });
     it("If the inport is no connected, check() should return false", () => {
-      expect(gain.check()).toBe(false);
+      gain.check();
+      expect(Behavior.errorMessages.length).toBe(1);
       const constant = new Constant(1, 1);
       const from = { [String(constant.id)]: 0 };
       const to = { [String(gain.id)]: 0 };
       Behavior.addLink("0", from, to);
-      expect(gain.check()).toBe(true);
+      Behavior.init();
+      gain.check();
+      expect(Behavior.errorMessages.length).toBe(0);
     });
   });
 

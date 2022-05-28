@@ -29,13 +29,8 @@ export class Scope extends Behavior {
     return this.oldValue;
   }
   check() {
-    if (
-      Behavior.behaviors[this.inputLink[0]] instanceof Behavior // 入力ポートは接続されているか
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    !(Behavior.behaviors[this.inputLink[0]] instanceof Behavior) && // 入力ポートは接続されているか
+      Behavior.errorMessages.push(`${this.name}${this.id}の入力ポートは接続されていません。`);
   }
   toString() {
     return "Scope";

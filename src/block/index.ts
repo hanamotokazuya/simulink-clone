@@ -1,6 +1,6 @@
 export { Block } from "./block.class";
 export { Node } from "./node.class";
-export { PaletteNode } from "./palette.node.class";
+export { PaletteNode } from "./paletteNode.class";
 export { Port } from "./port.class";
 export { Inport } from "./inport.class";
 export { Outport } from "./outport.class";

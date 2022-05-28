@@ -7,6 +7,7 @@ describe("Constant behavior test", () => {
     Behavior.endPointBehaviors = {};
     Behavior.links = {};
     constant = new Constant(0, 1) as Constant;
+    Behavior.errorMessages = [];
   });
   // Property Test -------------------------------------------------------------
   describe("Property test", () => {
@@ -42,7 +43,8 @@ describe("Constant behavior test", () => {
   describe("check() test", () => {
     it("If the constant value is not numerical value, check() should return false", () => {
       constant.property.constant = "NaN";
-      expect(constant.check()).toBe(false);
+      constant.check();
+      expect(Behavior.errorMessages.length).toBe(1);
     });
   });
 

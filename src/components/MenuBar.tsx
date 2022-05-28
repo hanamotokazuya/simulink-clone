@@ -23,10 +23,13 @@ const MenuBar: React.FC = () => {
       action({ type: "CHANGE_STATUS", status: "CHECKING" });
     } else if (status === "CHECKING") {
       console.log("CHECKING");
-      if (Behavior.check()) {
+      Behavior.check();
+      if (Behavior.errorMessages.length === 0) {
         action({ type: "CHANGE_STATUS", status: "RUNNING" });
       } else {
-        throw new Error("ERROR!");
+        // throw new Error("ERROR!");
+        console.log(Behavior.errorMessages);
+        action({ type: "CHANGE_STATUS", status: "ERROR" });
       }
     } else if (status === "RUNNING") {
       console.log("RUNNNING");

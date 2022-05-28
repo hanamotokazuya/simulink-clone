@@ -8,6 +8,7 @@ describe("Integrator behavior test", () => {
     Behavior.endPointBehaviors = {};
     Behavior.links = {};
     integrator = new Integrator(0, 0);
+    Behavior.errorMessages = [];
   });
   // Property Test -------------------------------------------------------------
   describe("Property test", () => {
@@ -47,15 +48,19 @@ describe("Integrator behavior test", () => {
       const to = { [String(integrator.id)]: 0 };
       Behavior.addLink("0", from, to);
       integrator.property.initVal = "NaN";
-      expect(integrator.check()).toBe(false);
+      integrator.check();
+      expect(Behavior.errorMessages.length).toBe(1);
     });
     it("If the inport is no connected, check() should return false", () => {
-      expect(integrator.check()).toBe(false);
+      integrator.check();
+      expect(Behavior.errorMessages.length).toBe(1);
       const constant = new Constant(1, 1);
       const from = { [String(constant.id)]: 0 };
       const to = { [String(integrator.id)]: 0 };
       Behavior.addLink("0", from, to);
-      expect(integrator.check()).toBe(true);
+      Behavior.init();
+      integrator.check();
+      expect(Behavior.errorMessages.length).toBe(0);
     });
   });
 

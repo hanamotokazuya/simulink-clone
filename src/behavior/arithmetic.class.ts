@@ -50,15 +50,12 @@ export class Arithmetic extends Behavior {
     }
   }
   check() {
-    if (
-      Behavior.behaviors[this.inputLink[0]] instanceof Behavior && // 入力ポート1は接続されているか
-      Behavior.behaviors[this.inputLink[1]] instanceof Behavior && // 入力ポート2は接続されているか
-      isOperator(this.property.operator) // 正しい演算子が指定されているか
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    !(Behavior.behaviors[this.inputLink[0]] instanceof Behavior) && // 入力ポート1は接続されているか
+      Behavior.errorMessages.push(`${this.name}${this.id}の入力ポート1は接続されていません。`);
+    !(Behavior.behaviors[this.inputLink[1]] instanceof Behavior) && // 入力ポート2は接続されているか
+      Behavior.errorMessages.push(`${this.name}${this.id}の入力ポート2は接続されていません。`);
+    !isOperator(this.property.operator) && // 正しい演算子が指定されているか
+      Behavior.errorMessages.push(`${this.name}${this.id}のパラメータは不正な値です。`);
   }
   toString() {
     return String(this.property.operator);
