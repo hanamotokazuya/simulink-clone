@@ -29,10 +29,13 @@ const calcSvg = (outport: Outport, inport: Inport): string => {
   const inportNodeBottom = inport.parent.top + inport.parent.height;
   const inportNodeTop = inport.parent.top;
   let innerDiffY: number;
+  let halfwayPointY: number;
   if (outportNodeTop > inportNodeTop) {
     innerDiffY = outportNodeTop - inportNodeBottom;
+    halfwayPointY = inportNodeBottom + innerDiffY / 2;
   } else {
     innerDiffY = inportNodeTop - outportNodeBottom;
+    halfwayPointY = outportNodeBottom + innerDiffY / 2;
   }
   const maxBottom = Math.max(outportNodeBottom, inportNodeBottom);
   let pointX1: number;
@@ -57,11 +60,11 @@ const calcSvg = (outport: Outport, inport: Inport): string => {
       pointX1 = startPointX + minDiffX / 2;
       pointY1 = startPointY;
       pointX2 = pointX1;
-      pointY2 = pointY1 + diffStartToEndY / 2;
+      pointY2 = halfwayPointY;
       pointX3 = pointX2 + diffStartToEndX - minDiffX;
       pointY3 = pointY2;
       pointX4 = pointX3;
-      pointY4 = pointY3 + diffStartToEndY / 2;
+      pointY4 = endPointY;
     }
   } else {
     pointX1 = startPointX + diffStartToEndX / 2;
@@ -71,7 +74,7 @@ const calcSvg = (outport: Outport, inport: Inport): string => {
     pointX3 = pointX2;
     pointY3 = pointY2;
     pointX4 = pointX3;
-    pointY4 = pointY3 + diffStartToEndY / 2;
+    pointY4 = endPointY;
   }
   let svg = `M ${startPointX} ${startPointY}
               L ${pointX1} ${pointY1}
