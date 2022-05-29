@@ -13,6 +13,7 @@ export type State = {
   selectedScope: Scope | undefined;
   status: Status;
   errorMessages: string[];
+  currentHelpPage: string;
 };
 export type DialogContent = [string, [string, string][]];
 export type Action =
@@ -24,7 +25,8 @@ export type Action =
   | CHANGE_PARAMETER
   | OPEN_SCOPE
   | CLOSE_SCOPE
-  | CHANGE_STATUS;
+  | CHANGE_STATUS
+  | CHANGE_HELP_PAGE;
 
 type TEST = {
   type: "TEST";
@@ -61,4 +63,8 @@ type CLOSE_SCOPE = {
 type CHANGE_STATUS = {
   type: "CHANGE_STATUS";
   status: Status;
+};
+type CHANGE_HELP_PAGE = {
+  type: "CHANGE_HELP_PAGE";
+  page: string;
 };

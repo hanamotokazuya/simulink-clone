@@ -2,8 +2,10 @@ import { Behavior } from "../behavior";
 import { useStateContext } from "../context/StateContext";
 import React, { useState, useEffect } from "react";
 import paletteIcon from "../../public/border_all_black_24dp.svg";
+import helpIcon from "../../public/help_outline_black_24dp.svg";
 import playIcon from "../../public/play_arrow_black_24dp.svg";
 import Image from "next/image";
+import Link from "next/link";
 
 /**
  * 実行機能などを埋め込んだメニューバー
@@ -73,7 +75,12 @@ const MenuBar: React.FC = () => {
         value={samplingTime}
         onChange={(e) => setSamplingTime(e.target.value)}
       />
-      <div>[s]</div>
+      <div className="mr-6">[s]</div>
+      <Link href="/help/howTo">
+        <a className="flex items-center" target="_blank">
+          <Image src={helpIcon} width={24} height={24} alt="helpIcon" />
+        </a>
+      </Link>
     </div>
   );
 };

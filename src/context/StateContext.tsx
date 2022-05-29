@@ -56,6 +56,8 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
         return { ...state, selectedScope: undefined };
       case "CHANGE_STATUS":
         return { ...state, status: action.status, errorMessages: Behavior.errorMessages };
+      case "CHANGE_HELP_PAGE":
+        return { ...state, currentHelpPage: action.page };
       default:
         return state;
     }
@@ -70,6 +72,7 @@ export const StateContextProvider: React.FC<Props> = ({ children }) => {
     selectedScope: undefined,
     status: "READY",
     errorMessages: [],
+    currentHelpPage: "使い方",
   };
   const [state, action] = useReducer(events, initializeState);
   return <StateContext.Provider value={{ state, action }}>{children}</StateContext.Provider>;
