@@ -1,11 +1,35 @@
 import HelpLayout from "../../src/components/help/HelpLayout";
+import { useStateContext } from "../../src/context/StateContext";
+import { useLayoutEffect } from "react";
+import Image from "next/image";
+import constantPalette from "../../public/help/constant_palette.png";
+import constantDiagram from "../../public/help/constant_diagram.png";
 
 const Constant: React.FC = () => {
+  const pageName = "Constant";
+  const {
+    state: { currentHelpPage },
+    action,
+  } = useStateContext();
+  useLayoutEffect(() => {
+    currentHelpPage !== pageName && action({ type: "CHANGE_HELP_PAGE", page: pageName });
+  }, [currentHelpPage, action]);
+
   return (
-    <HelpLayout name="Constant">
+    <HelpLayout name={pageName}>
       <div className="mb-10">
         <h1 className="text-4xl font-bold mb-4 border-b-2 pb-2">Constant</h1>
         <p>定数値の生成</p>
+        <div className="flex gap-8">
+          <div className="w-32">
+            <Image src={constantPalette} width={128} height={80} alt="constantPalette" />
+            <p className="text-center">パレット表示</p>
+          </div>
+          <div className="w-32">
+            <Image src={constantDiagram} width={128} height={80} alt="constantDiagram" />
+            <p className="text-center">ダイアグラム表示</p>
+          </div>
+        </div>
       </div>
 
       <div className="mb-10">

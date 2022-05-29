@@ -1,13 +1,26 @@
 import HelpLayout from "../../src/components/help/HelpLayout";
 import playIcon from "../../public/play_arrow_black_24dp.svg";
 import Image from "next/image";
+import screenStructure from "../../public/help/screen_structure.png";
+import elementsOfDiagram from "../../public/help/elements_of_diagram.png";
+import { useLayoutEffect } from "react";
+import { useStateContext } from "../../src/context/StateContext";
 
 const HowTo: React.FC = () => {
+  const pageName = "使い方";
+  const {
+    state: { currentHelpPage },
+    action,
+  } = useStateContext();
+  useLayoutEffect(() => {
+    currentHelpPage !== pageName && action({ type: "CHANGE_HELP_PAGE", page: pageName });
+  }, [currentHelpPage, action]);
+
   return (
-    <HelpLayout name="使い方">
+    <HelpLayout name={pageName}>
       <div className="mb-10">
         <h1 className="text-4xl font-bold mb-4 border-b-2 pb-2">使い方</h1>
-        <p>Simulink Cloneの操作方法について記述したページです。</p>
+        <p>Simulink Cloneの操作方法</p>
       </div>
 
       <div className="mb-10">
@@ -20,6 +33,7 @@ const HowTo: React.FC = () => {
           <li>コンソールウィンドウ</li>
           <li>ステータスバー</li>
         </ul>
+        <Image src={screenStructure} width={700} height={400} alt="screenStructure" />
       </div>
 
       <div className="mb-10">
@@ -49,11 +63,11 @@ const HowTo: React.FC = () => {
         <p>
           ダイアグラムを構築する領域です。
           <br />
-          Simulink-cloneでは、ブロック線図によるダイアグラムを構築できます。
+          Simulink Cloneでは、ブロック線図によるダイアグラムを構築できます。
           <br />
           ブロック線図は信号の流れを図式的に表現するダイアグラムです。
           <br />
-          Simulink-cloneにおけるブロック線図は以下の4つの基本要素で構成されます。
+          Simulink Cloneにおけるブロック線図は以下の4つの基本要素で構成されます。
         </p>
         <ul className="list-disc pl-8">
           <li>ノード: 入出力のふるまいを決定づける要素</li>
@@ -64,6 +78,7 @@ const HowTo: React.FC = () => {
         <p>
           また、ノードとそのノードに関連づいた入力ポートおよび出力ポートをまとめてブロックと呼びます。
         </p>
+        <Image src={elementsOfDiagram} width={600} height={300} alt="elementsOfDaigram" />
       </div>
 
       <div className="mb-10">

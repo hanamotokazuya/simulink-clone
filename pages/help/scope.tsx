@@ -1,11 +1,35 @@
 import HelpLayout from "../../src/components/help/HelpLayout";
+import { useStateContext } from "../../src/context/StateContext";
+import { useLayoutEffect } from "react";
+import Image from "next/image";
+import scopePalette from "../../public/help/scope_palette.png";
+import scopeDiagram from "../../public/help/scope_diagram.png";
 
 const Scope: React.FC = () => {
+  const pageName = "Scope";
+  const {
+    state: { currentHelpPage },
+    action,
+  } = useStateContext();
+  useLayoutEffect(() => {
+    currentHelpPage !== pageName && action({ type: "CHANGE_HELP_PAGE", page: pageName });
+  }, [currentHelpPage, action]);
+
   return (
-    <HelpLayout name="Scope">
+    <HelpLayout name={pageName}>
       <div className="mb-10">
         <h1 className="text-4xl font-bold mb-4 border-b-2 pb-2">Scope</h1>
         <p>入力信号のシミュレーション結果を表示</p>
+        <div className="flex gap-8">
+          <div className="w-32">
+            <Image src={scopePalette} width={128} height={80} alt="scopePalette" />
+            <p className="text-center">パレット表示</p>
+          </div>
+          <div className="w-32">
+            <Image src={scopeDiagram} width={128} height={80} alt="scopeDiagram" />
+            <p className="text-center">ダイアグラム表示</p>
+          </div>
+        </div>
       </div>
 
       <div className="mb-10">

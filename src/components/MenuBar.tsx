@@ -49,14 +49,15 @@ const MenuBar: React.FC = () => {
   // const handleChangeSamplingTime = (target: string) => !isNaN(num) && setSamplingTime(num);
 
   return (
-    <div className="h-8 bg-gray-200 flex items-center z-50 pl-4">
+    <div className="h-10 bg-gray-200 flex items-center z-50 pl-4">
+      <div className="font-bold text-2xl mr-4">Simulink Clone</div>
       <div className="w-8 h-8 cursor-pointer mr-4" onClick={handleExec}>
         <Image src={playIcon} width={32} height={32} alt="playIcon" />
       </div>
       {/* <div className="w-8 h-8 cursor-pointer">
         <Image src={paletteIcon} width={32} height={32} alt="paletteIcon" />
       </div> */}
-      <div className="mr-2">終了時間:</div>
+      <div>終了時間：</div>
       <input
         type="number"
         max="100"
@@ -66,7 +67,7 @@ const MenuBar: React.FC = () => {
         onChange={(e) => setEndTime(e.target.value)}
       />
       <div className="mr-2">[s]</div>
-      <div className="mr-2">サンプリング時間: </div>
+      <div>サンプリング時間：</div>
       <input
         type="number"
         min="0.01"
