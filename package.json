@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.7",
+    "better-react-mathjax": "^2.0.1",
     "chart.js": "^3.7.1",
     "fabric": "5.2.1",
     "lodash": "4.17.21",
