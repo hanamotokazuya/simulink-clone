@@ -110,6 +110,8 @@ const Tutorial: React.FC = () => {
             シミュレーションが正常に行われた場合、ステータスバーに「実行完了」と表示されます。
             <br />
             結果はScopeブロックをダブルクリックすることで確認することができます。
+            <br />
+            Scopeブロックは横軸を時間、縦軸をScopeへの入力信号とした時系列を表示します。
           </p>
           <Image src={tutorialResult} width={1536 * 0.5} height={793 * 0.5} alt="tutorialResult" />
         </div>
