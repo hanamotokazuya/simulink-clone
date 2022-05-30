@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { Behavior, Scope } from "../behavior";
-import { Node, Inport, Outport, PaletteNode, makeLink } from "../block";
+import { Node, Inport, Outport, PaletteNode, makeLink, Link } from "../block";
 import { Action } from "../types/context";
 
 // canvas上のrotate制御を無効にし，rotatePointをhiddenにする処理
@@ -62,11 +62,9 @@ export const initDiagram = (
 
   // MOUSE:DOWN
   diagram.on("mouse:down", (e) => {
+    activeObj?.set({ shadow: undefined });
     // ノードが選択されている状態でCtrl+clickされたとき，
     // 当該ノードとノードに紐づくポートとリンクを削除する．
-    if (e.target instanceof Inport || e.target instanceof Outport) {
-      // console.log(e.target.links);
-    }
     if (e.e.ctrlKey) {
       if (activeObj instanceof Node) {
         const inports = activeObj.inport;
@@ -89,6 +87,7 @@ export const initDiagram = (
       // 当該ポートに紐づくリンクを削除する．
       if (activeObj instanceof Inport || activeObj instanceof Outport) {
         removeLink(diagram, activeObj);
+        activeObj.set({ shadow: undefined });
         activeObj = null;
         diagram.renderAll();
         return;
@@ -110,7 +109,7 @@ export const initDiagram = (
     // オブジェクトが選択されていない場合にオブジェクトが押下されたとき，
     // 当該オブジェクトを記憶する処理
     if (!activeObj) {
-      if (e.target) {
+      if (e.target && !(e.target instanceof Link)) {
         activeObj = e.target;
       }
       // オブジェクトが選択されている場合の処理
@@ -118,15 +117,21 @@ export const initDiagram = (
       // 押下されたオブジェクトがインポートかつ記憶したオブジェクトがアウトポートであるとき，
       // 両者間にてリンクを生成する．
       // 処理完了後，オブジェクトの選択を解除する．
-      if (e.target instanceof Inport && e.target.links.length === 0) {
-        if (activeObj instanceof Outport && activeObj.parent !== e.target.parent) {
+      if (e.target instanceof Inport) {
+        if (
+          activeObj instanceof Outport &&
+          e.target.links.length === 0 &&
+          activeObj.parent !== e.target.parent
+        ) {
           const link = makeLink(activeObj, e.target);
           diagram.add(link);
           link.sendToBack();
+          activeObj.set({ shadow: undefined });
           activeObj = null;
           // 押下されたオブジェクトと記憶したオブジェクトが両方ともインポートであるとき，
           // 記憶したポートを押下されたポートに更新する．
         } else {
+          activeObj.set({ shadow: undefined });
           activeObj = e.target;
         }
         // 押下されたオブジェクトがアウトポートかつ記憶したオブジェクトがインポートであるとき，
@@ -141,19 +146,24 @@ export const initDiagram = (
           const link = makeLink(e.target, activeObj);
           diagram.add(link);
           link.sendToBack();
+          activeObj.set({ shadow: undefined });
           activeObj = null;
           // 押下されたオブジェクトと記憶したオブジェクトが両方ともアウトポートであるとき，
           // 記憶したポートを押下されたポートに更新する．
         } else {
+          activeObj.set({ shadow: undefined });
           activeObj = e.target;
         }
         // そのほかの条件下では，選択オブジェクトを更新する．
+      } else if (e.target instanceof Node) {
+        activeObj.set({ shadow: undefined });
+        activeObj = e.target;
       } else {
-        if (e.target !== undefined) {
-          activeObj = e.target;
-        }
+        activeObj.set({ shadow: undefined });
+        activeObj = null;
       }
     }
+    activeObj?.set({ shadow });
     // NodeTextの再描画
     diagram.renderAll();
     const nodes = Object.values(Node.nodes);
@@ -175,24 +185,6 @@ export const initDiagram = (
   diagram.on("object:moving", (e) => {
     // ブロックとポート・リンクの位置を連動させる処理
     if (e.target instanceof Node) e.target.updateSurrroundingPos();
-  });
-
-  // MOUSE:OVER
-  diagram.on("mouse:over", (e) => {
-    // マウスが当たったポートを青く光らせる処理
-    if (e.target instanceof Inport || e.target instanceof Outport) {
-      e.target && e.target.set({ shadow });
-      diagram.renderAll();
-    }
-  });
-
-  // MOUSE:OUT
-  diagram.on("mouse:out", (e) => {
-    // マウスから離れたポートの光を消す処理
-    if (e.target instanceof Inport || e.target instanceof Outport) {
-      e.target && e.target.set({ shadow: undefined });
-      diagram.renderAll();
-    }
   });
 
   // MOUSE:DOUBLECLICK
