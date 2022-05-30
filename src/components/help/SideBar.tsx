@@ -6,7 +6,7 @@ const SideBar: React.FC = () => {
     <div className="fixed translate-y-10 w-44 h-screen overflow-auto px-4 border-r-2">
       <nav>
         <ul className="flex flex-col gap-2 pt-8 text-xl">
-          <li className="font-bold border-b-2">GetStarting</li>
+          <li className="font-bold border-b-2">GetStarted</li>
           <NavItem name="使い方" href="/help/howTo" />
           <NavItem name="チュートリアル" href="/help/tutorial" />
           <li className="font-bold border-b-2">Blocks</li>
