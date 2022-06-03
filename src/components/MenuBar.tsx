@@ -49,7 +49,7 @@ const MenuBar: React.FC = () => {
   // const handleChangeSamplingTime = (target: string) => !isNaN(num) && setSamplingTime(num);
 
   return (
-    <div className="h-10 bg-gray-200 flex items-center z-50 pl-4">
+    <div className="w-[1700px] h-10 bg-gray-200 flex items-center z-50 pl-4">
       <div className="font-bold text-2xl mr-4">Simulink Clone</div>
       <div className="w-8 h-8 cursor-pointer mr-4" onClick={handleExec}>
         <Image src={playIcon} width={32} height={32} alt="playIcon" />
