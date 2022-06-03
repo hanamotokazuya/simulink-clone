@@ -2,8 +2,8 @@ import HelpLayout from "../../src/components/help/HelpLayout";
 import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import Image from "next/image";
-import integratorPalette from "../../public/help/integrator_palette.png";
-import integratorDiagram from "../../public/help/integrator_diagram.png";
+import integratorPalette from "../../public/help/integrator/integrator_palette.png";
+import integratorDiagram from "../../public/help/integrator/integrator_diagram.png";
 
 const Integrator: React.FC = () => {
   const pageName = "Integrator";

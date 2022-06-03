@@ -1,8 +1,8 @@
 import HelpLayout from "../../src/components/help/HelpLayout";
 import playIcon from "../../public/play_arrow_black_24dp.svg";
 import Image from "next/image";
-import screenStructure from "../../public/help/screen_structure.png";
-import elementsOfDiagram from "../../public/help/elements_of_diagram.png";
+import screenStructure from "../../public/help/howTo/screen_structure.png";
+import elementsOfDiagram from "../../public/help/howTo/elements_of_diagram.png";
 import { useLayoutEffect } from "react";
 import { useStateContext } from "../../src/context/StateContext";
 

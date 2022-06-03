@@ -2,8 +2,8 @@ import HelpLayout from "../../src/components/help/HelpLayout";
 import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import Image from "next/image";
-import gainPalette from "../../public/help/gain_palette.png";
-import gainDiagram from "../../public/help/gain_diagram.png";
+import gainPalette from "../../public/help/gain/gain_palette.png";
+import gainDiagram from "../../public/help/gain/gain_diagram.png";
 
 const Gain: React.FC = () => {
   const pageName = "Gain";

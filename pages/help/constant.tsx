@@ -2,8 +2,8 @@ import HelpLayout from "../../src/components/help/HelpLayout";
 import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import Image from "next/image";
-import constantPalette from "../../public/help/constant_palette.png";
-import constantDiagram from "../../public/help/constant_diagram.png";
+import constantPalette from "../../public/help/constant/constant_palette.png";
+import constantDiagram from "../../public/help/constant/constant_diagram.png";
 
 const Constant: React.FC = () => {
   const pageName = "Constant";

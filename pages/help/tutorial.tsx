@@ -3,11 +3,11 @@ import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 import Image from "next/image";
-import tutorialProcedure1 from "../../public/help/tutorial_procedure1.png";
-import tutorialProcedure2 from "../../public/help/tutorial_procedure2.png";
-import tutorialProcedure3 from "../../public/help/tutorial_procedure3.png";
+import tutorialProcedure1 from "../../public/help/tutorial/tutorial_procedure1.png";
+import tutorialProcedure2 from "../../public/help/tutorial/tutorial_procedure2.png";
+import tutorialProcedure3 from "../../public/help/tutorial/tutorial_procedure3.png";
 import playIcon from "../../public/play_arrow_black_24dp.svg";
-import tutorialResult from "../../public/help/tutorial_result.png";
+import tutorialResult from "../../public/help/tutorial/tutorial_result.png";
 
 const Tutorial: React.FC = () => {
   const pageName = "チュートリアル";

@@ -2,8 +2,8 @@ import HelpLayout from "../../src/components/help/HelpLayout";
 import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import Image from "next/image";
-import arithmeticPalette from "../../public/help/arithmetic_palette.png";
-import arithmeticDiagram from "../../public/help/arithmetic_diagram.png";
+import arithmeticPalette from "../../public/help/arithmetic/arithmetic_palette.png";
+import arithmeticDiagram from "../../public/help/arithmetic/arithmetic_diagram.png";
 
 const Arithmetic: React.FC = () => {
   const pageName = "Arithmetic";

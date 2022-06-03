@@ -2,8 +2,8 @@ import HelpLayout from "../../src/components/help/HelpLayout";
 import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import Image from "next/image";
-import scopePalette from "../../public/help/scope_palette.png";
-import scopeDiagram from "../../public/help/scope_diagram.png";
+import scopePalette from "../../public/help/scope/scope_palette.png";
+import scopeDiagram from "../../public/help/scope/scope_diagram.png";
 
 const Scope: React.FC = () => {
   const pageName = "Scope";
