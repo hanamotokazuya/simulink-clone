@@ -3,6 +3,7 @@ import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 import Image from "next/image";
+import tutorialModel from "../../public/help/tutorial/tutorial_model.png";
 import tutorialProcedure1 from "../../public/help/tutorial/tutorial_procedure1.png";
 import tutorialProcedure2 from "../../public/help/tutorial/tutorial_procedure2.png";
 import tutorialProcedure3 from "../../public/help/tutorial/tutorial_procedure3.png";
@@ -32,6 +33,7 @@ const Tutorial: React.FC = () => {
 
         <div className="mb-10">
           <h2 className="text-2xl font-bold mb-4 pb-2 border-b-2">ばねマスダンパ系</h2>
+          <Image src={tutorialModel} width={1038 * 0.5} height={580 * 0.5} alt="tutorialModel" />
           <p>
             本チュートリアルでは、図に示すような直線運動をするばねマスダンパ系をシミュレーションします。
             <br />
