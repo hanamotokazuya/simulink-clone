@@ -1,5 +1,4 @@
 import HelpLayout from "../../src/components/help/HelpLayout";
-import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 import Image from "next/image";
@@ -9,16 +8,16 @@ import tutorialProcedure2 from "../../public/help/tutorial/tutorial_procedure2.p
 import tutorialProcedure3 from "../../public/help/tutorial/tutorial_procedure3.png";
 import playIcon from "../../public/play_arrow_black_24dp.svg";
 import tutorialResult from "../../public/help/tutorial/tutorial_result.png";
+import { useHelpSelector, changeHelpPageAction } from "../../src/redux/help";
+import { useAppDispatch } from "../../src/redux/stores";
 
 const Tutorial: React.FC = () => {
   const pageName = "チュートリアル";
-  const {
-    state: { currentHelpPage },
-    action,
-  } = useStateContext();
+  const { currentHelpPage } = useHelpSelector();
+  const dispatch = useAppDispatch();
   useLayoutEffect(() => {
-    currentHelpPage !== pageName && action({ type: "CHANGE_HELP_PAGE", page: pageName });
-  }, [currentHelpPage, action]);
+    currentHelpPage !== pageName && dispatch(changeHelpPageAction(pageName));
+  }, [currentHelpPage, dispatch]);
 
   return (
     <MathJaxContext>

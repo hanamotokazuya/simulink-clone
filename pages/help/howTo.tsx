@@ -4,17 +4,16 @@ import Image from "next/image";
 import screenStructure from "../../public/help/howTo/screen_structure.png";
 import elementsOfDiagram from "../../public/help/howTo/elements_of_diagram.png";
 import { useLayoutEffect } from "react";
-import { useStateContext } from "../../src/context/StateContext";
+import { useHelpSelector, changeHelpPageAction } from "../../src/redux/help";
+import { useAppDispatch } from "../../src/redux/stores";
 
 const HowTo: React.FC = () => {
   const pageName = "使い方";
-  const {
-    state: { currentHelpPage },
-    action,
-  } = useStateContext();
+  const { currentHelpPage } = useHelpSelector();
+  const dispatch = useAppDispatch();
   useLayoutEffect(() => {
-    currentHelpPage !== pageName && action({ type: "CHANGE_HELP_PAGE", page: pageName });
-  }, [currentHelpPage, action]);
+    currentHelpPage !== pageName && dispatch(changeHelpPageAction(pageName));
+  }, [currentHelpPage, dispatch]);
 
   return (
     <HelpLayout name={pageName}>

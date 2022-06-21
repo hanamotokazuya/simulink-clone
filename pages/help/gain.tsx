@@ -1,19 +1,18 @@
 import HelpLayout from "../../src/components/help/HelpLayout";
-import { useStateContext } from "../../src/context/StateContext";
 import { useLayoutEffect } from "react";
 import Image from "next/image";
 import gainPalette from "../../public/help/gain/gain_palette.png";
 import gainDiagram from "../../public/help/gain/gain_diagram.png";
+import { useHelpSelector, changeHelpPageAction } from "../../src/redux/help";
+import { useAppDispatch } from "../../src/redux/stores";
 
 const Gain: React.FC = () => {
   const pageName = "Gain";
-  const {
-    state: { currentHelpPage },
-    action,
-  } = useStateContext();
+  const { currentHelpPage } = useHelpSelector();
+  const dispatch = useAppDispatch();
   useLayoutEffect(() => {
-    currentHelpPage !== pageName && action({ type: "CHANGE_HELP_PAGE", page: pageName });
-  }, [currentHelpPage, action]);
+    currentHelpPage !== pageName && dispatch(changeHelpPageAction(pageName));
+  }, [currentHelpPage, dispatch]);
 
   return (
     <HelpLayout name={pageName}>

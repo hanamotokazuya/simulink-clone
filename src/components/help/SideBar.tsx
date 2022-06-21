@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useStateContext } from "../../context/StateContext";
+import { useHelpSelector, changeHelpPageAction } from "../../redux/help";
+import { useAppDispatch } from "../../redux/stores";
 
 const SideBar: React.FC = () => {
   return (
@@ -27,10 +28,8 @@ type NavItemProps = {
   href: string;
 };
 const NavItem: React.FC<NavItemProps> = ({ name, href }) => {
-  const {
-    state: { currentHelpPage },
-    action,
-  } = useStateContext();
+  const dispatch = useAppDispatch();
+  const { currentHelpPage } = useHelpSelector();
   return (
     <li
       className={`pl-2 ${
@@ -38,7 +37,7 @@ const NavItem: React.FC<NavItemProps> = ({ name, href }) => {
       }`}
     >
       <Link href={href}>
-        <a onClick={() => action({ type: "CHANGE_HELP_PAGE", page: name })}>{name}</a>
+        <a onClick={() => dispatch(changeHelpPageAction(name))}>{name}</a>
       </Link>
     </li>
   );

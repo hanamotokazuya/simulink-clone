@@ -1,7 +1,9 @@
 import { fabric } from "fabric";
 import { Behavior, Scope } from "../behavior";
 import { Node, Inport, Outport, PaletteNode, makeLink, Link } from "../block";
-import { Action } from "../types/context";
+import { AppDispatch } from "../redux/stores";
+import { openScopeAction } from "../redux/scope";
+import { openDialogAction } from "../redux/dialog";
 
 // canvas上のrotate制御を無効にし，rotatePointをhiddenにする処理
 const controls = fabric.Object.prototype.controls;
@@ -14,11 +16,7 @@ rotateControls.visible = false;
  * @param paletteId palette用canvasのid
  * @returns [diagram, palette]
  */
-export const initDiagram = (
-  diagramId: string,
-  paletteId: string,
-  action: React.Dispatch<Action>
-) => {
+export const initDiagram = (diagramId: string, paletteId: string, dispatch: AppDispatch) => {
   const shadow = new fabric.Shadow({ color: "blue", blur: 15 });
 
   // ***************************************************************************
@@ -192,9 +190,9 @@ export const initDiagram = (
     // console.log("DBLCLICK");
     if (e.target instanceof Node) {
       if (e.target.behavior instanceof Scope) {
-        action({ type: "OPEN_SCOPE", scope: e.target.behavior });
+        dispatch(openScopeAction(e.target.behavior));
       } else {
-        action({ type: "OPEN_DIALOG", behavior: e.target.behavior });
+        dispatch(openDialogAction(e.target.behavior));
       }
     }
   });

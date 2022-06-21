@@ -1,12 +1,13 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { StateContextProvider } from "../src/context/StateContext";
+import { Provider } from "react-redux";
+import { store } from "../src/redux/stores";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <StateContextProvider>
+    <Provider store={store}>
       <Component {...pageProps} />
-    </StateContextProvider>
+    </Provider>
   );
 }
 
