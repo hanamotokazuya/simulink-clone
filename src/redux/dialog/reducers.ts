@@ -2,7 +2,6 @@ import { Behavior } from "../../behavior";
 import { Node } from "../../block";
 import * as Actions from "./actions";
 import { DialogType, DialogContent } from "./types";
-import { Reducer } from "redux";
 
 const initialState: DialogType["state"] = {
   blockId: "",
@@ -11,10 +10,7 @@ const initialState: DialogType["state"] = {
   dialogContent: ["", []],
 };
 
-export const dialogReducer: Reducer<DialogType["state"], DialogType["action"]> = (
-  state = initialState,
-  action
-) => {
+export const dialogReducer = (state = initialState, action: DialogType["action"]) => {
   switch (action.type) {
     case Actions.OPEN_DIALOG:
       const dialogContent: DialogContent = [
