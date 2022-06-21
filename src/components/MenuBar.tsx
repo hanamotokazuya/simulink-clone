@@ -1,12 +1,11 @@
 import { Behavior } from "../behavior";
+import { useStateContext } from "../context/StateContext";
 import React, { useState, useEffect } from "react";
 import paletteIcon from "../../public/border_all_black_24dp.svg";
 import helpIcon from "../../public/help_outline_black_24dp.svg";
 import playIcon from "../../public/play_arrow_black_24dp.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { changeStatusAction, useStatusSelector } from "../redux/status";
-import { useAppDispatch } from "../redux/stores";
 
 /**
  * 実行機能などを埋め込んだメニューバー
@@ -14,36 +13,40 @@ import { useAppDispatch } from "../redux/stores";
 const MenuBar: React.FC = () => {
   const [endTime, setEndTime] = useState(String(Behavior.endTime));
   const [samplingTime, setSamplingTime] = useState(String(Behavior.samplingTime));
-  const { status } = useStatusSelector();
-  const dispatch = useAppDispatch();
+  const {
+    state: { status },
+    action,
+  } = useStateContext();
   const handleExec = () => {
-    dispatch(changeStatusAction("START"));
+    action({ type: "CHANGE_STATUS", status: "START" });
     Behavior.endTime = Number(endTime);
     Behavior.samplingTime = Number(samplingTime);
   };
   useEffect(() => {
     if (status === "START") {
       // console.log("START");
-      dispatch(changeStatusAction("INITIALIZING"));
+      action({ type: "CHANGE_STATUS", status: "INITIALIZING" });
     } else if (status === "INITIALIZING") {
       // console.log("INITIALIZING");
       Behavior.init();
-      dispatch(changeStatusAction("CHECKING"));
+      action({ type: "CHANGE_STATUS", status: "CHECKING" });
     } else if (status === "CHECKING") {
       // console.log("CHECKING");
       Behavior.check();
       if (Behavior.errorMessages.length === 0) {
-        dispatch(changeStatusAction("RUNNING"));
+        action({ type: "CHANGE_STATUS", status: "RUNNING" });
       } else {
         // console.log(Behavior.errorMessages);
-        dispatch(changeStatusAction("ERROR", Behavior.errorMessages));
+        action({ type: "CHANGE_STATUS", status: "ERROR" });
       }
     } else if (status === "RUNNING") {
       // console.log("RUNNNING");
       Behavior.run();
-      dispatch(changeStatusAction("FINISHED"));
+      action({ type: "CHANGE_STATUS", status: "FINISHED" });
     }
-  }, [status, dispatch]);
+  }, [status, action]);
+  // const handleChangeEndTime = (target: string) => !isNaN(Number(target)) && Number(target) > 0 setEndTime(num);
+  // const handleChangeSamplingTime = (target: string) => !isNaN(num) && setSamplingTime(num);
 
   return (
     <div className="w-screen min-w-max h-10 bg-gray-200 flex items-center z-50 pl-4">

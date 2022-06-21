@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
-import { useStatusSelector } from "../redux/status";
+import { useStateContext } from "../context/StateContext";
 
 /**
  * 実行状態を表示するステータスバー
  */
 const StatusBar: React.FC = () => {
-  const { status } = useStatusSelector();
+  const {
+    state: { status },
+  } = useStateContext();
   const statusMessage = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (statusMessage.current) {

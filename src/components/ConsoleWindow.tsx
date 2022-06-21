@@ -1,10 +1,12 @@
-import { useStatusSelector } from "../redux/status";
+import { useStateContext } from "../context/StateContext";
 
 /**
  * エラーメッセージを表示するためのコンソールウィンドウ
  */
 const ConsoleWindow: React.FC = () => {
-  const { errorMessages } = useStatusSelector();
+  const {
+    state: { errorMessages },
+  } = useStateContext();
   return (
     <div className="w-[1700px] h-36 p-1 border-2 border-black border-t-0 text-red-500 font-bold overflow-auto">
       {errorMessages instanceof Array &&

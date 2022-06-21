@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { initDiagram } from "..//diagram";
+import { useStateContext } from "../context/StateContext";
 import DialogBox from "./DialogBox";
-import { useAppDispatch } from "../redux/stores";
 
 /**
  * パレットとダイアグラムを表示する
  */
 const WorkSpace: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const { action } = useStateContext();
   useEffect(() => {
-    const [diagramObj, paletteObj] = initDiagram("diagram", "palette", dispatch);
-  }, [dispatch]);
+    const [diagramObj, paletteObj] = initDiagram("diagram", "palette", action);
+    action({ type: "INIT", diagram: diagramObj, palette: paletteObj });
+  }, [action]);
   return (
     <>
       <DialogBox />
