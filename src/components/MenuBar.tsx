@@ -73,12 +73,12 @@ const MenuBar: React.FC = () => {
         value={samplingTime}
         onChange={(e) => setSamplingTime(e.target.value)}
       />
-      {/* <div className="mr-6">[s]</div> */}
-      {/* <Link href="/help/howTo"> */}
-      {/* <a className="flex items-center" target="_blank"> */}
-      {/* <Image src={helpIcon} width={24} height={24} alt="helpIcon" /> */}
-      {/* </a> */}
-      {/* </Link> */}
+      <div className="mr-6">[s]</div>
+      <Link href="/help/howTo">
+        <a className="flex items-center" target="_blank">
+          <Image src={helpIcon} width={24} height={24} alt="helpIcon" />
+        </a>
+      </Link>
     </div>
   );
 };
